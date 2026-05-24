@@ -44,7 +44,7 @@ import {
   type PersistedMessage,
   type Conversation
 } from "../lib/gemininio/storage";
-import { logGemError } from "../lib/gemininio/logUserFacingError";
+import { userFacingGemError } from "../lib/gemininio/logUserFacingError";
 import { completedTurnsForApi, type ChatTurn } from "../lib/gemininio/chatHistory";
 import { subscribeOpenGemininio } from "../lib/gemininio/openEvent";
 
@@ -228,7 +228,7 @@ export default function Gemininio() {
     sessionRef.current = null;
 
     const id = createId();
-    const welcomeText = CHATTFNT_OPENER || "אהלן! אני ChatTFNT, מארח הנופש שלכם. שאלו אותי הכל!";
+    const welcomeText = CHATTFNT_OPENER || "אהלן! אני ChatTFNT — שאלו על התוכנית, המלון או השייט.";
     const welcome: Message = {
       role: "model",
       text: welcomeText,
@@ -328,8 +328,7 @@ export default function Gemininio() {
           setStatus("ready");
         },
         onError: msg => {
-          const code = logGemError("live:onError", new Error(msg));
-          setError(t("gem_error_occurred", { code }));
+          setError(userFacingGemError("live:onError", new Error(msg), t));
           setStatus("error");
           setMessages(ms =>
             ms.filter(m => !(m.role === "model" && m.streaming && !m.text))
@@ -348,8 +347,7 @@ export default function Gemininio() {
       setStatus("ready");
       return session;
     } catch (e) {
-      const code = logGemError("live:connect", e);
-      setError(t("gem_error_occurred", { code }));
+      setError(userFacingGemError("live:connect", e, t));
       setStatus("error");
       return null;
     }
@@ -402,29 +400,13 @@ export default function Gemininio() {
       }).catch(() => { /* ignore */ });
     }
 
-    if (!searchOn) {
-      if (!playerRef.current) playerRef.current = new PcmPlayer();
-      try {
-        await playerRef.current.ensureAudioUnlocked();
-      } catch {
-        /* non-fatal */
-      }
-      const s = await ensureSession(priorForApi);
-      if (!s) {
-        setMessages(ms => ms.filter(m => !(m.role === "model" && m.streaming && !m.text)));
-        return;
-      }
-      s.sendText(trimmed);
-      return;
-    }
-
     const sys = buildTypedReplySystemPrompt();
     try {
       const reply = await generateGroundedReply({
         apiKey,
         systemInstruction: sys,
         userMessage: trimmed,
-        useGoogleSearch: true,
+        useGoogleSearch: searchOn,
         history: priorForApi
       });
       setMessages(ms => {
@@ -436,19 +418,11 @@ export default function Gemininio() {
         return next;
       });
     } catch (e) {
-      const code = logGemError("typed:rest", e);
-      setMessages(ms => {
-        const next = [...ms];
-        const last = next[next.length - 1];
-        if (last?.role === "model" && last.streaming) {
-          next[next.length - 1] = {
-            ...last,
-            text: t("gem_error_occurred", { code }),
-            streaming: false
-          };
-        }
-        return next;
-      });
+      const message = userFacingGemError("typed:rest", e, t);
+      setError(message);
+      setStatus("error");
+      setMessages(ms => ms.filter(m => !(m.role === "model" && m.streaming && !m.text)));
+      return;
     }
     setStatus("ready");
   }
@@ -485,8 +459,7 @@ export default function Gemininio() {
       setStatus("recording");
     } catch (e) {
       recorderRef.current = null;
-      const code = logGemError("voice:start", e);
-      setError(t("gem_error_occurred", { code }));
+      setError(userFacingGemError("voice:start", e, t));
       setStatus("error");
     }
   }
@@ -509,8 +482,7 @@ export default function Gemininio() {
     try {
       blob = await recorder.stop();
     } catch (e) {
-      const code = logGemError("voice:stop", e);
-      setError(t("gem_error_occurred", { code }));
+      setError(userFacingGemError("voice:stop", e, t));
       setStatus("error");
       return;
     }
@@ -531,8 +503,7 @@ export default function Gemininio() {
     try {
       transcript = await transcribeAudio({ apiKey, audio: blob, language: lang });
     } catch (e) {
-      const code = logGemError("voice:transcribe", e);
-      setError(t("gem_error_occurred", { code }));
+      setError(userFacingGemError("voice:transcribe", e, t));
       setStatus("error");
       return;
     }

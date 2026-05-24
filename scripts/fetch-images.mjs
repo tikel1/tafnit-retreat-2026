@@ -151,7 +151,7 @@ const TARGETS = [
   // ---------- Atmospheric extras used by activity tiles / future galleries ----------
   // Hotel pool with sea horizon — for "אחר הצהריים — בריכה".
   ["pool.jpg", { url: unsplash("photo-1582719508461-905c673771fd") }],
-  // Mobile espresso cart / barista pulling a shot — for "עגלת קפה — מיקה".
+  // Mobile espresso cart — for "עגלת קפה — מיקא".
   ["coffee-cart.jpg", { url: unsplash("photo-1442550528053-c431ecb55509") }],
   // Long candle-lit dinner table — for "ארוחת ערב חגיגית".
   ["dinner.jpg", { url: unsplash("photo-1414235077428-338989a2e8c0") }],

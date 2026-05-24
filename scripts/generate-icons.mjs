@@ -3,7 +3,7 @@
 //
 // We:
 //   1. Trim the flat white margins around the brain logo.
-//   2. Center-crop a tight square and resize to PWA + favicon sizes.
+//   2. Fit the full artwork into a square (no center-crop / zoom).
 //   3. Render a navy-padded "maskable" variant for Android.
 //
 // Run again any time the source artwork changes.
@@ -19,9 +19,6 @@ const publicDir = resolve(root, "public");
 const NAVY = { r: 0x0f, g: 0x2a, b: 0x55, alpha: 1 };
 const WHITE = { r: 0xff, g: 0xff, b: 0xff, alpha: 1 };
 
-/** Trim white padding, then zoom in slightly so the brain fills the tile. */
-const CROP_ZOOM = 0.95;
-
 const sizes = [
   { out: "favicon-16.png", size: 16 },
   { out: "favicon-32.png", size: 32 },
@@ -33,24 +30,27 @@ const sizes = [
 
 mkdirSync(publicDir, { recursive: true });
 
-async function croppedSquareBuffer() {
+async function squareIconBuffer() {
   const trimmed = await sharp(src).trim({ threshold: 15 }).toBuffer();
   const { width, height } = await sharp(trimmed).metadata();
-  const side = Math.round(Math.min(width, height) * CROP_ZOOM);
-  const left = Math.round((width - side) / 2);
-  const top = Math.round((height - side) / 2);
+  const side = Math.max(width, height);
 
   return sharp(trimmed)
-    .extract({ left, top, width: side, height: side })
+    .resize(side, side, {
+      fit: "contain",
+      background: WHITE,
+      position: "center",
+    })
+    .flatten({ background: WHITE })
     .png()
     .toBuffer();
 }
 
-const cropped = await croppedSquareBuffer();
+const iconSquare = await squareIconBuffer();
 
 for (const { out, size } of sizes) {
-  await sharp(cropped)
-    .resize(size, size, { fit: "fill", background: WHITE })
+  await sharp(iconSquare)
+    .resize(size, size, { fit: "contain", background: WHITE })
     .flatten({ background: WHITE })
     .png({ compressionLevel: 9 })
     .toFile(resolve(publicDir, out));
@@ -61,8 +61,8 @@ for (const { out, size } of sizes) {
 async function maskable(outName, size) {
   const inner = Math.round(size * 0.86);
   const padding = Math.round((size - inner) / 2);
-  const inset = await sharp(cropped)
-    .resize(inner, inner, { fit: "fill", background: WHITE })
+  const inset = await sharp(iconSquare)
+    .resize(inner, inner, { fit: "contain", background: WHITE })
     .flatten({ background: WHITE })
     .png()
     .toBuffer();
@@ -86,8 +86,8 @@ await maskable("app-icon-maskable-512.png", 512);
 
 // Generic favicon.ico — a single 32px PNG renamed so browsers that look
 // for /favicon.ico don't 404.
-await sharp(cropped)
-  .resize(32, 32, { fit: "fill", background: WHITE })
+await sharp(iconSquare)
+  .resize(32, 32, { fit: "contain", background: WHITE })
   .flatten({ background: WHITE })
   .png({ compressionLevel: 9 })
   .toFile(resolve(publicDir, "favicon.ico"));

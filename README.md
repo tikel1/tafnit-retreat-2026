@@ -30,13 +30,14 @@ npm run lint     # ESLint flat config
 
 ## Environment variables
 
-Copy `.env.example` to `.env.local` and fill in any keys you have. The AI chat (ChatTFNT) needs `VITE_GEMINI_API_KEY`; everything else boots without any keys.
+Copy `.env.example` to `.env.local`. For production, use the **Cloudflare proxy** (see [`worker/README.md`](worker/README.md)) — the Gemini key stays on the server, not in the JS bundle.
 
 | Variable | Used by | Notes |
 | --- | --- | --- |
-| `VITE_GEMINI_API_KEY` | ChatTFNT (in-app chat) | Baked into the bundle at build time. Restrict by HTTP referrer in [AI Studio](https://aistudio.google.com/). Leave blank to fall back to per-visitor pasted keys. |
+| `VITE_GEMINI_PROXY_URL` | ChatTFNT (production) | Public worker URL, e.g. `https://tafnit-gemini-proxy.<account>.workers.dev/gemini`. Set as a GitHub **variable** for CI builds. |
+| `VITE_GEMINI_API_KEY` | ChatTFNT (local dev) | Fallback only — bakes the key into the bundle. **Do not use for GitHub Pages.** |
 
-When the key is **absent** at build time, the site still works in full — the chat sheet asks each visitor to paste their own free Gemini key.
+When neither is set at build time, visitors see the key-paste setup screen.
 
 ## Content lives in `src/data/`
 
@@ -71,11 +72,11 @@ The current shipping art:
 
 ## Deploying
 
-Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds with `VITE_GEMINI_API_KEY` (if set as a repo secret) and publishes `dist/` to GitHub Pages.
+Pushing to `main` triggers `.github/workflows/deploy.yml`, which deploys the Cloudflare Gemini proxy (if configured) and publishes `dist/` to GitHub Pages.
 
 1. Create a public repo named `tafnit-retreat-2026`.
 2. *Settings → Pages → Build and deployment → Source = GitHub Actions.*
-3. *Settings → Secrets and variables → Actions → New repository secret* → `VITE_GEMINI_API_KEY` (optional).
+3. Configure Cloudflare + GitHub secrets for ChatTFNT — see [`worker/README.md`](worker/README.md).
 4. `git push origin main`.
 
 The site lands at `https://<owner>.github.io/tafnit-retreat-2026/`.

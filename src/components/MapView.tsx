@@ -15,6 +15,7 @@ delete (L.Icon.Default.prototype as unknown as { _getIconUrl: unknown })._getIco
 
 const COLOR_BY_KIND: Record<VenueKind, string> = {
   meeting: "#2E5599",
+  coffee:  "#C98B2E",
   marina:  "#4FA37D",
   hotel:   "#0F2A55",
   spa:     "#6BB89A"
@@ -211,6 +212,7 @@ function VenueGallery({
   const t = useT();
   const kindLabelKey: Record<VenueKind, string> = {
     meeting: "cat_meeting",
+    coffee: "cat_coffee",
     marina: "cat_marina",
     hotel: "cat_hotel",
     spa: "cat_spa",
@@ -312,6 +314,10 @@ export default function MapView({ venuesRef }: OuterProps = {}) {
         <span className="inline-flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-full" style={{ background: COLOR_BY_KIND.meeting }} />
           {t("cat_meeting")}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <span className="w-3 h-3 rounded-full" style={{ background: COLOR_BY_KIND.coffee }} />
+          {t("cat_coffee")}
         </span>
         <span className="inline-flex items-center gap-1.5">
           <span className="w-3 h-3 rounded-full" style={{ background: COLOR_BY_KIND.marina }} />

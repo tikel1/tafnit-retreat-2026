@@ -15,6 +15,32 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  deploy-gemini-proxy:
+    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install wrangler
+        run: npm install --prefix worker --no-audit --no-fund
+
+      - name: Deploy Gemini proxy
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          workingDirectory: worker
+          command: deploy
+          secrets: |
+            GEMINI_API_KEY
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
   build:
     runs-on: ubuntu-latest
     steps:
@@ -34,8 +60,19 @@ jobs:
 
       - name: Build
         run: npm run build
-        # VITE_GEMINI_API_KEY comes from committed .env.production.
-        # Optional: set a GitHub Actions secret with the same name to override.
+        env:
+          # Public worker URL (no secret). Example:
+          # https://tafnit-gemini-proxy.<account>.workers.dev/gemini
+          VITE_GEMINI_PROXY_URL: ${{ vars.VITE_GEMINI_PROXY_URL }}
+
+      - name: Verify no API key in bundle
+        if: vars.VITE_GEMINI_PROXY_URL != ''
+        run: |
+          if grep -rE 'AIzaSy[A-Za-z0-9_-]{20,}' dist/assets/*.js; then
+            echo 'Gemini API key found in production bundle — aborting.'
+            exit 1
+          fi
+          echo 'OK: no client API key in bundle.'
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

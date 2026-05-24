@@ -2,11 +2,11 @@
  * Type contract for the Tafnit retreat companion app.
  *
  * Kept deliberately slim — this is a 2-day work retreat with one hotel,
- * three venues, two chapters, and an evening mystery guest. Everything
+ * three venues on the map, two chapters, and an evening mystery guest. Everything
  * the UI consumes flows through these shapes.
  */
 
-export type VenueKind = "meeting" | "marina" | "hotel" | "spa";
+export type VenueKind = "meeting" | "coffee" | "marina" | "hotel" | "spa";
 
 export interface Venue {
   id: string;

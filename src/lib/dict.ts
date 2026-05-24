@@ -11,8 +11,8 @@
 
 export const DICT = {
   /* ---------- Brand / hero ---------- */
-  brand: "נופש חברה - תפנית",
-  brand_short: "נופש חברה - תפנית 26'",
+  brand: "נופש חברה",
+  brand_short: "נופש חברה",
   brand_year: "יוני 26'",
   brand_subtitle: "4-5 ביוני 2026",
   /* Magazine-style "by-line" shown under the masthead in the hero. */
@@ -87,15 +87,16 @@ export const DICT = {
   /* ---------- Map section ---------- */
   map_eyebrow: "המפה של היומיים",
   map_title: "כל הנקודות במקום אחד",
-  map_kicker: "עזריאלי · מרינה הרצליה · מלון דן תל אביב",
+  map_kicker: "עזריאלי · מיקא · מרינה הרצליה · מלון דן תל אביב",
   map_intro:
-    "שלוש נקודות בלבד — מקום המפגש בעזריאלי, נמל היציאה במרינה הרצליה, והמלון על קו החוף בתל אביב. לחצו על אחת הסיכות לפרטים ולניווט.",
+    "ארבע נקודות — המשרד בעזריאלי, עגלת הקפה מיקא ברמת השרון, נמל היציאה במרינה הרצליה, והמלון על קו החוף בתל אביב. לחצו על אחת הסיכות לפרטים ולניווט.",
   map_zoom_fit: "התאמת תצוגה לכל הנקודות",
   map_locate_me: "הצגת המיקום שלי",
   map_you_here: "אני כאן",
 
   /* Map categories */
   cat_meeting: "מפגש",
+  cat_coffee: "קפה",
   cat_marina: "מרינה",
   cat_hotel: "מלון",
   cat_spa: "ספא",
@@ -192,8 +193,11 @@ export const DICT = {
   gem_speaking: "מדבר…",
   gem_connecting: "מתחבר…",
   gem_disconnected: "לא מחובר. הקישו להתחבר.",
-  gem_error_generic: "משהו השתבש. נסו שוב מאוחר יותר.",
-  gem_error_occurred: "משהו השתבש. נסו שוב מאוחר יותר. (קוד: {code})",
+  gem_error_generic: "לא הצלחתי לענות. נסו שוב.",
+  gem_error_occurred: "לא הצלחתי לענות. (קוד: {code})",
+  gem_error_quota: "מכסת Gemini נגמרה. נסו מאוחר יותר, או הדביקו מפתח חדש בהגדרות.",
+  gem_error_key: "מפתח Gemini לא תקין. צרו מפתח חדש והדביקו בהגדרות.",
+  gem_error_network: "בעיית חיבור. בדקו אינטרנט ונסו שוב.",
   gem_first_hint:
     "נסו: \"מתי השייט?\" · \"איך מגיעים למלון?\" · \"מה יש בספא?\" · \"מי האומן האורח?\"",
   gem_settings: "הגדרות",

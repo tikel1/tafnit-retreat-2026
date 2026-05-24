@@ -8,10 +8,10 @@
  */
 
 import type { ChatMessage } from "./chatHistory";
+import { buildGenerateContentUrl } from "./geminiEndpoint";
 import { CHATTFNT_PERSONA } from "./persona";
 
 const MODEL = "gemini-2.0-flash";
-const BASE = "https://generativelanguage.googleapis.com/v1beta/models";
 
 function toContents(history: ChatMessage[]) {
   return history.map((m) => ({
@@ -37,7 +37,7 @@ export async function* streamReply(
   apiKey: string,
   history: ChatMessage[]
 ): AsyncGenerator<string, void, unknown> {
-  const url = `${BASE}/${MODEL}:streamGenerateContent?alt=sse&key=${encodeURIComponent(apiKey)}`;
+  const url = buildGenerateContentUrl(MODEL, apiKey, { stream: true });
   const body = {
     contents: toContents(history),
     systemInstruction: {

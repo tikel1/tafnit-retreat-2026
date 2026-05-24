@@ -1,12 +1,11 @@
 /**
  * One-shot voice → text transcription using Gemini's REST API.
  *
- * The mic flow now uses MediaRecorder (record an audio blob locally),
- * then sends that blob to Gemini's `generateContent` endpoint with an
- * inline_data audio part and a transcription prompt. The model returns
- * the verbatim text the user spoke, which Gemininio then sends as a
- * normal text message via the existing text-submit path.
+ * The mic flow uses MediaRecorder, then sends the blob to Gemini
+ * `generateContent` with inline audio for transcription.
  */
+
+import { buildGenerateContentUrl } from "./geminiEndpoint";
 
 const TRANSCRIBE_MODELS = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash"] as const;
 
@@ -76,7 +75,7 @@ export async function transcribeAudio(params: TranscribeParams): Promise<string>
   let lastErr = "Transcription failed.";
 
   for (const model of TRANSCRIBE_MODELS) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const url = buildGenerateContentUrl(model, apiKey);
     const body = {
       contents: [
         {

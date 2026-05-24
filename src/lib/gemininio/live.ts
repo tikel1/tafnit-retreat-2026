@@ -18,17 +18,14 @@
  */
 
 import { bytesToBase64 } from "./audio";
+import { buildLiveWebSocketUrl } from "./geminiEndpoint";
 
 /* Currently-valid bidiGenerateContent models on v1beta.
  * `gemini-3.1-flash-live-preview` is the documented "all use cases" recommendation. */
 const PRIMARY_MODEL  = "models/gemini-3.1-flash-live-preview";
 const FALLBACK_MODEL = "models/gemini-2.5-flash-native-audio-latest";
 
-const WS_BASE =
-  "wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent";
-
-/** Voices ship with the Live model. "Charon" is warm and slightly husky,
- *  "Puck" is a good lighter alternative. Let's use "Puck" or "Charon". */
+/** Voices ship with the Live model. "Charon" is warm and slightly husky. */
 const VOICE_NAME = "Charon";
 
 export interface LiveCallbacks {
@@ -76,7 +73,7 @@ export class LiveSession {
 
   private openOnce(model: string): Promise<void> {
     return new Promise((resolve, reject) => {
-      const url = `${WS_BASE}?key=${encodeURIComponent(this.opts.apiKey)}`;
+      const url = buildLiveWebSocketUrl(this.opts.apiKey);
       let ws: WebSocket;
       try {
         ws = new WebSocket(url);

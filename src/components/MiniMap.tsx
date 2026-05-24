@@ -6,6 +6,7 @@ import NavigateLinks from "./NavigateLinks";
 
 const COLOR_BY_KIND: Record<VenueKind, string> = {
   meeting: "#2E5599",
+  coffee:  "#C98B2E",
   marina:  "#4FA37D",
   hotel:   "#0F2A55",
   spa:     "#6BB89A"

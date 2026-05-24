@@ -4,6 +4,7 @@ import { ArrowRight, ArrowLeft, MapPin, Lightbulb } from "lucide-react";
 import { itinerary } from "../data/itinerary";
 import { getVenue } from "../data/venues";
 import { navigateChapter, navigateHome, rememberChapter } from "../lib/route";
+import { linkifyPhones } from "../lib/linkifyPhones";
 import { useT } from "../lib/dict";
 import { formatDate } from "../lib/nav";
 import DayCard from "./DayCard";
@@ -175,7 +176,7 @@ export default function ChapterDetailPage({ dayNumber }: Props) {
                     <Lightbulb size={16} strokeWidth={1.8} />
                   </span>
                   <p className="text-[15px] text-ink-800 leading-relaxed flex-1">
-                    {tip}
+                    {linkifyPhones(tip)}
                   </p>
                 </li>
               ))}

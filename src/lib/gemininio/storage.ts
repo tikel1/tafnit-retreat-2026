@@ -1,31 +1,34 @@
 /**
- * Tiny localStorage shim for the Gemininio chat, with a fall-back to
- * a build-time env var so the site can ship with a default key.
+ * Tiny localStorage shim for the Gemininio chat.
  *
- * Resolution order (first non-empty wins):
- *   1. localStorage entry — a key the current visitor pasted.
- *   2. import.meta.env.VITE_GEMINI_API_KEY — baked in at build time.
- *   3. null — the setup screen asks the visitor for a key.
+ * Resolution order for Gemini access:
+ *   1. VITE_GEMINI_PROXY_URL — secure; key stays on Cloudflare Worker.
+ *   2. localStorage entry — a key the visitor pasted (dev / fallback).
+ *   3. import.meta.env.VITE_GEMINI_API_KEY — baked in at build (dev only).
+ *   4. null — setup screen asks for a key.
  */
+
+import { isProxyMode } from "./geminiEndpoint";
 
 const KEY = "tafnit2026.gemininio.apiKey";
 const HISTORY_KEY = "tafnit2026.gemininio.history"; // legacy single-chat key
 const CONVERSATIONS_KEY = "tafnit2026.gemininio.conversations";
 const ACTIVE_CONV_ID_KEY = "tafnit2026.gemininio.activeConvId";
 
-/** Build-time default key. */
+/** Build-time client key — avoid in production; use the proxy instead. */
 const BUILD_KEY: string =
   typeof import.meta !== "undefined" &&
   typeof import.meta.env?.VITE_GEMINI_API_KEY === "string"
     ? (import.meta.env.VITE_GEMINI_API_KEY as string)
     : "";
 
-/** Did we ship with a default key? */
+/** Chat works out of the box (proxy or baked-in key). */
 export function hasBuildTimeKey(): boolean {
-  return BUILD_KEY.trim().length > 0;
+  return isProxyMode() || BUILD_KEY.trim().length > 0;
 }
 
 export function getApiKey(): string | null {
+  if (isProxyMode()) return "__proxy__";
   const userKey = readUserKey();
   if (userKey) return userKey;
   return BUILD_KEY.trim() || null;
@@ -214,7 +217,7 @@ export function clearHistory(): void {
 }
 
 export function getBuiltinKey(): string | undefined {
-  return hasBuildTimeKey() ? (getApiKey() || undefined) : undefined;
+  return hasBuildTimeKey() && !isProxyMode() ? (getApiKey() || undefined) : undefined;
 }
 
 export function getUserKey(): string | undefined {
@@ -234,5 +237,5 @@ export function getActiveKey(): string | undefined {
 }
 
 export function shouldShowChatFab(): boolean {
-  return getActiveKey() !== undefined;
+  return getActiveKey() !== undefined || isProxyMode();
 }

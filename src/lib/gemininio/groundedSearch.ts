@@ -6,6 +6,7 @@
  */
 
 import type { ChatTurn } from "./chatHistory";
+import { buildGenerateContentUrl } from "./geminiEndpoint";
 
 const MODELS_TO_TRY = ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"] as const;
 
@@ -52,7 +53,7 @@ export async function generateGroundedReply(params: GroundedReplyParams): Promis
   });
 
   for (const model of MODELS_TO_TRY) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(params.apiKey)}`;
+    const url = buildGenerateContentUrl(model, params.apiKey);
     const body: Record<string, unknown> = {
       systemInstruction: { parts: [{ text: params.systemInstruction }] },
       contents,
@@ -121,7 +122,7 @@ export async function generateChatTitle(apiKey: string, firstMessage: string, la
       : "Write a very short title (max 5 words) for a conversation starting with this message. Return ONLY the title, no quotes, no period:\n\n";
 
   for (const model of MODELS_TO_TRY) {
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${encodeURIComponent(apiKey)}`;
+    const url = buildGenerateContentUrl(model, apiKey);
     const body = {
       contents: [{ role: "user", parts: [{ text: prompt + firstMessage }] }],
       generationConfig: { temperature: 0.3, maxOutputTokens: 20 }
