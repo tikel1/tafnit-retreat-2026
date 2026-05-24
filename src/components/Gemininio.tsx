@@ -221,7 +221,7 @@ export default function Gemininio() {
     sessionRef.current = null;
 
     const id = createId();
-    const welcomeText = CHATTFNT_OPENER || "אהלן! אני ChatTFNT — שאלו על התוכנית, המלון או השייט.";
+    const welcomeText = CHATTFNT_OPENER || "אהלן! אני ChatTFNT 🌊 שאלו על התוכנית, המלון או השייט.";
     const welcome: Message = {
       role: "model",
       text: welcomeText,
