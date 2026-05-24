@@ -178,6 +178,13 @@ export const DICT = {
   gem_reset_history: "נקו את השיחה",
   gem_input_placeholder: "כתבו שאלה ל-ChatTFNT…",
   gem_send: "שלחו",
+  gem_mic_hold: "החזיקו כדי לדבר",
+  gem_mic_release: "שחררו כדי לשלוח",
+  gem_mic_start: "הקישו להקלטה",
+  gem_mic_stop: "הקישו לעצירה",
+  gem_recording: "מקליט — עוצר לשליחה אוטומטית…",
+  gem_transcribing: "מתמלל…",
+  gem_transcribe_failed: "התמלול נכשל. נסו שוב.",
   gem_listening: "מקשיב…",
   gem_thinking: "חושב…",
   gem_speaking: "מדבר…",
@@ -191,6 +198,11 @@ export const DICT = {
   gem_back: "חזרה לשיחה",
   gem_builtin_key_note:
     "משתמשים במפתח המובנה של הנופש. כדי להשתמש במפתח אישי, הגדירו אותו במטמון הדפדפן.",
+  gem_unmute: "השמעת קול תשובה",
+  gem_mute: "השתקת קול תשובה",
+  gem_input_mode_note: "הגדרות שימוש במיקרופון",
+  gem_web_search_enable: "חיפוש בגוגל מופעל",
+  gem_web_search_disable: "חיפוש בגוגל כבוי",
 
   /* ---------- Listen / audio (kept for parity, hidden in this build) ---------- */
   listen_play: "האזינו",

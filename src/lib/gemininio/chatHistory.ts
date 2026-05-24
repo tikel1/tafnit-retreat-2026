@@ -12,6 +12,33 @@ export interface ChatMessage {
   ts: number;
 }
 
+export type ChatTurn = { role: "user" | "model"; text: string };
+
+export function completedTurnsForApi(
+  messages: Array<{ role: "user" | "model"; text: string; streaming?: boolean }>
+): ChatTurn[] {
+  return messages
+    .filter(
+      (m) =>
+        (m.role === "user" || m.role === "model") &&
+        m.text.trim().length > 0 &&
+        !m.streaming
+    )
+    .map((m) => ({ role: m.role, text: m.text.trim() }));
+}
+
+export function formatRecentChatBlock(turns: ChatTurn[], maxChars = 6000): string {
+  const slice = turns.length > 20 ? turns.slice(-20) : turns;
+  const lines = slice.map(
+    (m) => `${m.role === "user" ? "User" : "ChatTFNT"}: ${m.text}`
+  );
+  let text = lines.join("\n");
+  if (text.length > maxChars) {
+    text = "…(earlier turns omitted)\n" + text.slice(text.length - maxChars + 28);
+  }
+  return text;
+}
+
 const STORAGE_KEY = "tafnit:chat-history:v1";
 
 export function loadHistory(): ChatMessage[] {
