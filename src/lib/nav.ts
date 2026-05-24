@@ -64,7 +64,7 @@ export function formatDate(iso: string): string {
 export function formatDateShort(iso: string): string {
   const [, m, d] = iso.split("-").map(Number);
   if (!m || !d) return iso;
-  return `${d} ${HE_MONTHS[m - 1].slice(0, 3)}`;
+  return `${d} ב${HE_MONTHS[m - 1]}`;
 }
 
 export function scrollToId(id: string): void {
