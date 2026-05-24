@@ -3,7 +3,7 @@ import { assetUrl } from "../lib/assets";
 
 /**
  * The three physical venues that anchor the retreat:
- *   1. עזריאלי — Thursday morning meeting point.
+ *   1. עזריאלי — Thursday morning meeting at the office.
  *   2. מרינה הרצליה — boat departure pier.
  *   3. מלון דן תל אביב — overnight stay, Via LOMAH Spa, pool, dinner, performance.
  *
@@ -17,7 +17,7 @@ export const venues: Venue[] = [
     address: "דרך מנחם בגין 132, תל אביב",
     coords: [32.0744, 34.7919],
     description:
-      "מקום המפגש בבוקר חמישי, 08:30 — מתאספים ויוצאים יחד לכיוון המרינה.",
+      "המשרד שלנו — בבוקר חמישי, 08:30, מתאספים ויוצאים יחד לכיוון המרינה.",
     image: assetUrl("images/azrieli.jpg"),
     website: "https://www.azrieli.com/centers/tel-aviv-center/",
   },
