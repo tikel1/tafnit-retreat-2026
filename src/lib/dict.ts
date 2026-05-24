@@ -6,7 +6,7 @@
  *
  *   const t = useT();
  *   t("plan_eyebrow");        // "התוכנית · יום אחר יום"
- *   t("plan_chapter_x_of_y", { x: 1, y: 2 });  // "פרק 1 / 2"
+ *   t("plan_chapter_x_of_y", { x: 1, y: 2 });  // "יום 1 / 2"
  */
 
 export const DICT = {
@@ -17,6 +17,8 @@ export const DICT = {
   brand_subtitle: "4-5 ביוני 2026",
   /* Magazine-style "by-line" shown under the masthead in the hero. */
   families_byline: "יומיים על קו החוף · תל אביב · הרצליה · 4-5 ביוני 2026",
+  families_byline_mobile_1: "יומיים על קו החוף",
+  families_byline_mobile_2: "4-5 ביוני 2026",
   /* Phase-specific lead lines (italic, above the centerpiece). */
   hero_before_lead: "סוף שבוע של פינוקים וחוויות",
   hero_today_lead: "היום בנופש",
@@ -64,7 +66,7 @@ export const DICT = {
   plan_eyebrow: "התוכנית · יום אחר יום",
   plan_title: "מה בתוכנית",
   plan_kicker: "יומיים של חוויות ורגעים יפים · החליקו ביניהם או לחצו לקריאה מלאה",
-  plan_chapter_x_of_y: "פרק {x} / {y}",
+  plan_chapter_x_of_y: "יום {x} / {y}",
   read_more: "קראו עוד",
   hide_details: "הסתר פרטים",
 
@@ -74,7 +76,7 @@ export const DICT = {
   hour_by_hour: "שעה אחרי שעה",
   on_the_map: "על המפה",
   things_to_know: "טוב לדעת",
-  tips_for_chapter: "טיפים לפרק הזה",
+  tips_for_chapter: "טיפים ליום הזה",
   previous: "קודם",
   next: "הבא",
 
@@ -150,7 +152,7 @@ export const DICT = {
   /* ---------- TripStats ---------- */
   trip_stats_eyebrow: "במספרים",
   trip_stats_days: "ימים",
-  trip_stats_chapters: "פרקים",
+  trip_stats_chapters: "ימים",
   trip_stats_venues: "מקומות",
   trip_stats_activities: "פעילויות",
 
@@ -247,9 +249,9 @@ export const DICT = {
   install_step_android_a2hs_hint: "הניסוח תלוי בגרסת Chrome",
 
   /* ---------- TripStrip ---------- */
-  scroll_chapters_prev: "פרקים קודמים",
-  scroll_chapters_next: "פרקים הבאים",
-  chapter_label: "פרק",
+  scroll_chapters_prev: "ימים קודמים",
+  scroll_chapters_next: "ימים הבאים",
+  chapter_label: "יום",
   month_jun_short: "ביוני",
 
   /* ---------- Footer ---------- */

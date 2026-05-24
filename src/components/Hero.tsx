@@ -266,8 +266,15 @@ export default function Hero() {
           <div className="h-px flex-1 bg-tafnit-mint-300/70" />
         </div>
 
-        <div className="mt-1 sm:mt-1.5 font-display italic text-[10px] sm:text-[12px] text-tafnit-mint-300 tracking-wide drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
-          {t("families_byline")}
+        <div className="mt-1 sm:mt-1.5 font-display italic text-tafnit-mint-300 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)] text-center sm:text-start">
+          <span className="sm:hidden text-[11px] leading-snug tracking-normal">
+            {t("families_byline_mobile_1")}
+            <br />
+            {t("families_byline_mobile_2")}
+          </span>
+          <span className="hidden sm:block text-[12px] tracking-wide">
+            {t("families_byline")}
+          </span>
         </div>
       </motion.div>
 

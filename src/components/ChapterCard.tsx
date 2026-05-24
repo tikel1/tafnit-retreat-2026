@@ -53,7 +53,7 @@ export default function ChapterCard({ day }: { day: Day }) {
               {ROMAN[day.dayNumber]}
             </div>
             <div className="hidden sm:block h-px w-10 bg-cream-50/40 mb-1.5" />
-            <div className="text-[10px] uppercase tracking-[0.24em] font-semibold text-tafnit-mint-300">
+            <div className="text-[10px] uppercase tracking-[0.18em] sm:tracking-[0.24em] font-semibold text-tafnit-mint-300">
               {t("plan_chapter_x_of_y", {
                 x: String(day.dayNumber).padStart(2, "0"),
                 y: "02"
