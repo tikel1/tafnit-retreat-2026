@@ -12,7 +12,7 @@
 export const DICT = {
   /* ---------- Brand / hero ---------- */
   brand: "נופש חברה תפנית",
-  brand_short: "תפנית '26",
+  brand_short: "נופש חברה '26",
   brand_year: "'26",
   brand_subtitle: "4-5 ביוני 2026",
   /* Magazine-style "by-line" shown under the masthead in the hero. */
