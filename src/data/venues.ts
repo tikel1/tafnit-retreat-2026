@@ -39,7 +39,7 @@ export const venues: Venue[] = [
     address: "הירקון 99, תל אביב",
     coords: [32.0844, 34.7679],
     description:
-      "המלון הראשון של רשת דן ואחד מ-Leading Hotels of the World. שתי בריכות עם נוף לים, ספא Via LOMAH, חוף פרטי וחדר כושר.",
+      "המלון הראשון של רשת דן. שתי בריכות עם נוף לים, ספא Via LOMAH, חוף פרטי וחדר כושר.",
     image: assetUrl("images/dan-tel-aviv.jpg"),
     website: "https://www.danhotels.co.il/TelAvivHotels/DanTelAvivHotel",
     phone: "+972-3-5202525",

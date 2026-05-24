@@ -7,14 +7,11 @@ export default function Footer() {
     <footer className="border-t border-cream-200 bg-gradient-to-b from-cream-100/0 to-cream-100/80 mt-8">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
         <div className="text-center max-w-xl mx-auto">
-          <div className="text-[10px] uppercase tracking-[0.32em] text-tafnit-mint-600 font-semibold">
-            קולופון
-          </div>
-          <h3 className="mt-3 font-display font-bold text-3xl sm:text-4xl text-tafnit-navy-900 leading-tight">
+          <h3 className="font-display font-bold text-3xl sm:text-4xl text-tafnit-navy-900 leading-tight">
             {t("footer_made_with")}
           </h3>
           <p className="mt-3 text-ink-700/80 text-base sm:text-lg">
-            שני ימים. אתר אחד. כל מה שתצטרכו, ביד.
+            {t("footer_tagline")}
           </p>
           <div className="mt-6 flex items-center justify-center gap-2 text-xs text-ink-700/70 flex-wrap">
             <span className="font-display font-semibold">{t("brand_short")}</span>

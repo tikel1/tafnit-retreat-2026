@@ -263,9 +263,6 @@ export default function Hero() {
         dir="rtl"
       >
         <div className="flex items-baseline gap-3">
-          <div className="font-display tracking-[0.16em] text-[11px] sm:text-xs uppercase whitespace-nowrap font-semibold text-white drop-shadow-[0_1px_4px_rgba(0,0,0,0.55)]">
-            {t("brand")}
-          </div>
           <div className="h-px flex-1 bg-tafnit-mint-300/70" />
         </div>
 

@@ -125,7 +125,9 @@ function digestSpa(): string {
     `  - Highlights:`,
     viaLomahSpa.highlights.map(h => `    • ${h}`).join("\n"),
     `  - Booking Note: ${viaLomahSpa.bookingNote}`,
-    `  - Age Limit: ${viaLomahSpa.ageLimitNote}`
+    ...(viaLomahSpa.ageLimitNote
+      ? [`  - Age Limit: ${viaLomahSpa.ageLimitNote}`]
+      : []),
   ].join("\n");
 }
 

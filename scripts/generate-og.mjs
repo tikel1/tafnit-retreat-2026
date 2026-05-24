@@ -27,13 +27,9 @@ const footerSvg = Buffer.from(`
 <svg width="${W}" height="${FOOTER_H}" xmlns="http://www.w3.org/2000/svg">
   <rect width="${W}" height="${FOOTER_H}" fill="#0F2A55"/>
   <rect y="0" width="${W}" height="4" fill="#6BB89A"/>
-  <text x="600" y="58" text-anchor="middle" direction="rtl" unicode-bidi="embed"
+  <text x="600" y="82" text-anchor="middle" direction="rtl" unicode-bidi="embed"
         fill="#FBF8EF" font-family="Arial, Helvetica, sans-serif" font-size="44" font-weight="700">
-    נופש חברה &apos;26
-  </text>
-  <text x="600" y="105" text-anchor="middle" direction="rtl" unicode-bidi="embed"
-        fill="#6BB89A" font-family="Arial, Helvetica, sans-serif" font-size="26" font-weight="600">
-    4–5 ביוני 2026 · תל אביב · הרצליה · שייט · ספא · דן
+    נופש חברה - תפנית 26&apos;
   </text>
 </svg>`);
 

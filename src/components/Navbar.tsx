@@ -70,7 +70,7 @@ export default function Navbar() {
                 scrolled ? "text-tafnit-mint-700" : "text-tafnit-mint-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)]"
               }`}
             >
-              · {t("brand_year")}
+              {t("brand_year")}
             </span>
           </span>
         </button>

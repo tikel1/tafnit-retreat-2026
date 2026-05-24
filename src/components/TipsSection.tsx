@@ -12,7 +12,6 @@ export default function TipsSection() {
       id="tips"
       eyebrow={t("tips_eyebrow")}
       title={t("tips_title")}
-      kicker={t("tips_kicker")}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
         {tips.map((tip, i) => {

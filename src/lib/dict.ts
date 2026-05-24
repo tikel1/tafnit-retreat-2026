@@ -11,21 +11,21 @@
 
 export const DICT = {
   /* ---------- Brand / hero ---------- */
-  brand: "נופש חברה תפנית",
-  brand_short: "נופש חברה '26",
-  brand_year: "'26",
+  brand: "נופש חברה - תפנית",
+  brand_short: "נופש חברה - תפנית 26'",
+  brand_year: "יוני 26'",
   brand_subtitle: "4-5 ביוני 2026",
   /* Magazine-style "by-line" shown under the masthead in the hero. */
   families_byline: "יומיים על קו החוף · תל אביב · הרצליה · 4-5 ביוני 2026",
   /* Phase-specific lead lines (italic, above the centerpiece). */
-  hero_before_lead: "סוף השבוע של תפנית – בים, באופק",
+  hero_before_lead: "סוף שבוע של פינוקים וחוויות",
   hero_today_lead: "היום בנופש",
   hero_tomorrow_lead: "מחר בנופש",
   hero_after_lead: "ככה זה היה",
   /* Smaller phase hints (italic, below the countdown). */
   hero_close_almost: "כמעט שם – לא לשכוח לארוז את בגד הים!",
   hero_one_week: "שבוע אחד לסוף שבוע בלתי נשכח · זה הזמן להזמין טיפול בספא",
-  hero_one_month: "פחות מחודש · זמן מעולה לאשר השתתפות",
+  hero_one_month: "עוד מעט ממש! זמן מעולה לאשר השתתפות",
   hero_far: "מתחילים את הספירה לאחור",
   hero_after_title: "תודה שבאתם",
   hero_after_sub: "4 – 5 ביוני 2026 · נופש החברה של תפנית",
@@ -110,10 +110,10 @@ export const DICT = {
 
   /* ---------- Stays section ---------- */
   stays_eyebrow: "המלון",
-  stays_title: "לילה אחד בדן תל אביב",
+  stays_title: "לילה אחד במלון דן תל אביב",
   stays_kicker: "צ׳ק-אין בחמישי אחה״צ · צ׳ק-אאוט בשישי בצהריים",
   stays_intro:
-    "המלון הראשון של רשת דן, ממש על קו החוף — שתי בריכות מול נוף פתוח לים, ספא Via LOMAH, וחוף תל אביב במרחק חציית כביש בלבד.",
+    "המלון הראשון של רשת דן, ממש על קו החוף — שתי בריכות מול נוף פתוח לים, ספא Via LOMAH, וחוף הים של תל אביב מעבר לכביש.",
   stay_check_in: "צ'ק-אין",
   stay_check_out: "צ'ק-אאוט",
   stay_nights_one: "{n} לילה",
@@ -136,7 +136,7 @@ export const DICT = {
   spa_booking_note: "מומלץ להזמין מראש",
 
   /* ---------- Tips section ---------- */
-  tips_eyebrow: "טיפים מהיודעים",
+  tips_eyebrow: "טיפים",
   tips_title: "כמה דברים שכדאי לדעת מראש",
   tips_kicker: "חמש דקות של קריאה — חוסך הרבה אחר כך",
 
@@ -254,6 +254,7 @@ export const DICT = {
 
   /* ---------- Footer ---------- */
   footer_made_with: "נבנה לעובדי תפנית · יוני 2026",
+  footer_tagline: "יומיים של ים, פינוקים וזמן ביחד — הפרטים כולם כאן.",
   footer_attribution:
     "תמונות בקרדיט ליוצריהן. מפה © OpenStreetMap ו-CARTO.",
   footer_open_repo: "פתחו את הקוד",
