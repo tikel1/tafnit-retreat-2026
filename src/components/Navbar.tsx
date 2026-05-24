@@ -66,7 +66,7 @@ export default function Navbar() {
               <span className="sm:hidden">{t("brand_short")}</span>
             </span>
             <span
-              className={`font-display text-xs sm:text-sm font-semibold ${
+              className={`hidden sm:inline font-display text-xs sm:text-sm font-semibold ${
                 scrolled ? "text-tafnit-mint-700" : "text-tafnit-mint-300 drop-shadow-[0_1px_3px_rgba(0,0,0,0.45)]"
               }`}
             >

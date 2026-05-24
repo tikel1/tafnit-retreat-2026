@@ -259,14 +259,14 @@ export default function Hero() {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.1 }}
-        className="relative z-10 shrink-0 max-w-6xl w-full mx-auto px-5 sm:px-8 pt-8 sm:pt-16"
+        className="relative z-10 shrink-0 max-w-6xl w-full mx-auto px-5 sm:px-8 pt-14 sm:pt-16"
         dir="rtl"
       >
         <div className="flex items-baseline gap-3">
           <div className="h-px flex-1 bg-tafnit-mint-300/70" />
         </div>
 
-        <div className="mt-1 sm:mt-1.5 font-display italic text-tafnit-mint-300 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)] text-center sm:text-start">
+        <div className="mt-1 sm:mt-1.5 font-display italic text-tafnit-mint-300 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)] text-end sm:text-start ps-24 sm:ps-0 max-w-[calc(100%-6rem)] sm:max-w-none">
           <span className="sm:hidden text-[11px] leading-snug tracking-normal">
             {t("families_byline_mobile_1")}
             <br />

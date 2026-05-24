@@ -34,16 +34,8 @@ jobs:
 
       - name: Build
         run: npm run build
-        env:
-          # Baked into the JS bundle so retreat attendees don't have to paste
-          # their own Gemini key. Set this in:
-          #   GitHub repo → Settings → Secrets and variables →
-          #   Actions → New repository secret
-          # Name: VITE_GEMINI_API_KEY
-          # Value: AIza…
-          # If the secret is missing the build still succeeds; the
-          # site falls back to asking each visitor for their own key.
-          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
+        # VITE_GEMINI_API_KEY comes from committed .env.production.
+        # Optional: set a GitHub Actions secret with the same name to override.
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
