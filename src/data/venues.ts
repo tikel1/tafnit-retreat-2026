@@ -18,7 +18,7 @@ export const venues: Venue[] = [
     address: "דרך מנחם בגין 132, תל אביב",
     coords: [32.0744, 34.7919],
     description:
-      "המשרד שלנו — בבוקר חמישי, 08:30, מתאספים ויוצאים יחד לכיוון המרינה.",
+      "המשרד שלנו — בבוקר חמישי, 08:30, מתאספים ויוצאים יחד לדרך.",
     image: assetUrl("images/azrieli.jpg"),
     website: "https://www.azrieli.com/centers/tel-aviv-center/",
   },
@@ -29,7 +29,7 @@ export const venues: Venue[] = [
     address: "משתלת ירוק ישראלי, השרף 6, רמת השרון",
     coords: [32.1388, 34.8306],
     description:
-      "עגלת קפה במשתלת ירוק ישראלי ברמת השרון — קפה, מאפים ואווירה ירוקה.",
+      "עגלת קפה — קפה, מאפים ואווירה ירוקה.",
     image: assetUrl("images/coffee-cart.jpg"),
     website: "https://share.google/dDoSGDEl21rDybaK1",
   },

@@ -84,6 +84,8 @@ async function getCommonsFile(fileTitle, width) {
 const unsplash = (photoId, w = 1600) =>
   `https://images.unsplash.com/${photoId}?fm=jpg&q=85&w=${w}&auto=format&fit=crop`;
 
+const DAN = "https://www.danhotels.co.il";
+
 const FALLBACK_UA =
   "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)";
 
@@ -122,11 +124,12 @@ const TARGETS = [
   // ---------- Venues — used by MapView popups + the StaysSection hero ----------
   // Azrieli — the iconic triangle tower shot, 2009 (Commons).
   ["azrieli.jpg", { commons: "File:Azrieli Center 2.jpg", width: 2000 }],
-  // Marina Herzliya — official aerial of the basin and yachts (Commons).
-  ["marina-herzliya.jpg", { commons: "File:Herzliya Marina Aerial View.jpg", width: 2000 }],
-  // Dan Tel Aviv — the famously rainbow-striped façade by Yaacov Agam,
-  // shot from the beach promenade. Iconic, immediately recognizable.
-  ["dan-tel-aviv.jpg", { commons: "File:PikiWiki Israel 51690 dan hotel, tel aviv beach.jpg", width: 2000 }],
+  // Marina Herzliya — yachts and waterfront at water level (Commons).
+  ["marina-herzliya.jpg", { commons: "File:Marina of Herzliya.JPG", width: 2000 }],
+  // Dan Tel Aviv — rainbow façade from the beach promenade (official site).
+  ["dan-tel-aviv.jpg", {
+    url: `${DAN}/sites/default/files/2017-10/7716417222_8c1c2c5232_b.jpg`,
+  }],
 
   // ---------- Day lead images ----------
   // Day 1 — sailing photos. The previous `boat.jpg` Unsplash ID was
@@ -149,14 +152,19 @@ const TARGETS = [
   ["via-lomah-spa.jpg", { url: unsplash("photo-1540555700478-4be289fbecef") }],
 
   // ---------- Atmospheric extras used by activity tiles / future galleries ----------
-  // Hotel pool with sea horizon — for "אחר הצהריים — בריכה".
-  ["pool.jpg", { url: unsplash("photo-1582719508461-905c673771fd") }],
-  // Mobile espresso cart — for "עגלת קפה — מיקא".
-  ["coffee-cart.jpg", { url: unsplash("photo-1442550528053-c431ecb55509") }],
-  // Long candle-lit dinner table — for "ארוחת ערב חגיגית".
-  ["dinner.jpg", { url: unsplash("photo-1414235077428-338989a2e8c0") }],
-  // Israeli/Mediterranean breakfast spread — for Day 2 "ארוחת בוקר".
-  ["breakfast.jpg", { url: unsplash("photo-1533089860892-a7c6f0a88666") }],
+  // Dan Tel Aviv pool deck with sea view — for "אחר הצהריים — בריכה".
+  ["pool.jpg", { url: `${DAN}/sites/default/files/2023-05/500X240%2002_1.jpg` }],
+  // Mika coffee cart at משתלת ירוק ישראלי — cover photo from the
+  // verified Coffee Trail listing (coffeetrail.co.il/coffeecart/mika/).
+  ["coffee-cart.jpg", {
+    url: "https://bunny-wp-pullzone-znzm1vro0m.b-cdn.net/wp-content/uploads/2025/11/mika-cover-1536x1152.jpeg",
+  }],
+  // Gourmet plate from Dan Tel Aviv — for "ארוחת ערב חגיגית".
+  ["dinner.jpg", {
+    url: `${DAN}/sites/default/files/2022-11/DTA%20500x240_0000_21_DAN_TLV_BREAKFAST_JUNE_21_DSC2049_SD_1.jpg`,
+  }],
+  // In-room breakfast tray with sea view — for Day 2 "ארוחת בוקר".
+  ["breakfast.jpg", { url: `${DAN}/sites/default/files/2022-05/626x398%20copy_0.jpg` }],
   // Tel Aviv beachfront skyline at dusk — bonus visual context.
   ["tel-aviv-skyline.jpg", { url: unsplash("photo-1547483036-24bc77c79804") }],
   // Stage / spotlight / microphone — for the mystery-guest evening teaser.

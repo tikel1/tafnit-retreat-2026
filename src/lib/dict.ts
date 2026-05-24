@@ -85,7 +85,7 @@ export const DICT = {
   severity_info: "טוב לדעת",
 
   /* ---------- Map section ---------- */
-  map_eyebrow: "המפה של היומיים",
+  map_eyebrow: "מפה",
   map_title: "כל הנקודות במקום אחד",
   map_kicker: "עזריאלי · מיקא · מרינה הרצליה · מלון דן תל אביב",
   map_intro:
