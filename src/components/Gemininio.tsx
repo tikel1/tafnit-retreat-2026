@@ -22,7 +22,6 @@ import { PcmPlayer } from "../lib/gemininio/audio";
 import { VoiceRecorder } from "../lib/gemininio/voiceRecorder";
 import { transcribeAudio } from "../lib/gemininio/transcribe";
 import {
-  buildLiveSessionSystemPrompt,
   buildTypedReplySystemPrompt,
   CHATTFNT_OPENER
 } from "../lib/gemininio/persona";
@@ -45,7 +44,7 @@ import {
   type Conversation
 } from "../lib/gemininio/storage";
 import { userFacingGemError } from "../lib/gemininio/logUserFacingError";
-import { completedTurnsForApi, type ChatTurn } from "../lib/gemininio/chatHistory";
+import { completedTurnsForApi } from "../lib/gemininio/chatHistory";
 import { subscribeOpenGemininio } from "../lib/gemininio/openEvent";
 
 /**
@@ -87,12 +86,7 @@ export default function Gemininio() {
   const [messages, setMessages] = useState<Message[]>(() => loadHistory());
   const [conversations, setConversations] = useState<Conversation[]>(() => loadConversations());
   const [activeConvId, setActiveConvId] = useState<string | null>(() => loadActiveConversationId());
-  
-  /** Always matches `messages` for async paths. */
-  const messagesRef = useRef<Message[]>(messages);
-  useEffect(() => {
-    messagesRef.current = messages;
-  });
+
   const [error, setError] = useState<string | null>(null);
   const [showHistory, setShowHistory] = useState(false);
   const [micVolume, setMicVolume] = useState(0);
@@ -124,7 +118,6 @@ export default function Gemininio() {
   const sessionRef = useRef<LiveSession | null>(null);
   const playerRef = useRef<PcmPlayer | null>(null);
   const recorderRef = useRef<VoiceRecorder | null>(null);
-  const transcriptRef = useRef<string>("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -265,92 +258,6 @@ export default function Gemininio() {
 
   function close() {
     setStatus("closed");
-  }
-
-  async function ensureSession(recentTurns?: ChatTurn[]): Promise<LiveSession | null> {
-    if (sessionRef.current?.isOpen()) return sessionRef.current;
-
-    const apiKey = getApiKey();
-    if (!apiKey) {
-      setStatus("needs-key");
-      return null;
-    }
-
-    setStatus("connecting");
-    setError(null);
-
-    const turnsForPrompt = recentTurns ?? completedTurnsForApi(messagesRef.current);
-
-    const session = new LiveSession(
-      {
-        apiKey,
-        systemInstruction: buildLiveSessionSystemPrompt(turnsForPrompt),
-        language: lang
-      },
-      {
-        onText: delta => {
-          setMessages(ms => {
-            const last = ms[ms.length - 1];
-            if (last && last.role === "model" && last.streaming) {
-              return [...ms.slice(0, -1), { ...last, text: last.text + delta }];
-            }
-            return [...ms, { role: "model", text: delta, ts: Date.now(), streaming: true }];
-          });
-        },
-        onAudio: pcm => {
-          if (!audioEnabledRef.current) return;
-          if (!playerRef.current) playerRef.current = new PcmPlayer();
-          playerRef.current.enqueue(pcm);
-          setStatus("speaking");
-        },
-        onTranscript: delta => {
-          transcriptRef.current += delta;
-        },
-        onTurnComplete: () => {
-          const transcript = transcriptRef.current.trim();
-          transcriptRef.current = "";
-          setMessages(ms => {
-            let next = ms;
-            if (transcript) {
-              const lastIsStreamingModel =
-                ms.length > 0 && ms[ms.length - 1].role === "model" && ms[ms.length - 1].streaming;
-              const userMsg: Message = {
-                role: "user",
-                text: transcript,
-                ts: Date.now() - 1
-              };
-              next = lastIsStreamingModel
-                ? [...ms.slice(0, -1), userMsg, ms[ms.length - 1]]
-                : [...ms, userMsg];
-            }
-            return next.map(m => (m.streaming ? { ...m, streaming: false } : m));
-          });
-          setStatus("ready");
-        },
-        onError: msg => {
-          setError(userFacingGemError("live:onError", new Error(msg), t));
-          setStatus("error");
-          setMessages(ms =>
-            ms.filter(m => !(m.role === "model" && m.streaming && !m.text))
-              .map(m => (m.streaming ? { ...m, streaming: false } : m))
-          );
-        },
-        onClose: () => {
-          if (status !== "closed") setStatus("ready");
-        }
-      }
-    );
-
-    try {
-      await session.connect();
-      sessionRef.current = session;
-      setStatus("ready");
-      return session;
-    } catch (e) {
-      setError(userFacingGemError("live:connect", e, t));
-      setStatus("error");
-      return null;
-    }
   }
 
   async function submitUserMessage(explicitText?: string) {

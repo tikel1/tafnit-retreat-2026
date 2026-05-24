@@ -14,7 +14,12 @@ export function logGemError(scope: string, err: unknown): string {
   return code;
 }
 
-type GemDict = (key: string, params?: Record<string, string>) => string;
+import type { DictKey } from "../dict";
+
+type GemDict = (
+  key: DictKey,
+  params?: Record<string, string | number>
+) => string;
 
 function errorMessage(err: unknown): string {
   if (err instanceof Error) return err.message;
