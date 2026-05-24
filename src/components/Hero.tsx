@@ -210,7 +210,7 @@ export default function Hero() {
   return (
     <header
       id="hero"
-      className="relative flex flex-col overflow-hidden text-white bg-cream-100 h-[min(68svh,640px)] sm:h-[min(72svh,680px)]"
+      className="relative flex flex-col overflow-hidden text-white bg-cream-100 h-[min(48svh,420px)] sm:h-[min(68svh,620px)]"
       style={{
         paddingTop: "env(safe-area-inset-top)",
         ...(swipeTouchAction ? { touchAction: swipeTouchAction } : {}),
@@ -259,7 +259,7 @@ export default function Hero() {
         initial={{ opacity: 0, y: -8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.7, delay: 0.1 }}
-        className="relative z-10 shrink-0 max-w-6xl w-full mx-auto px-5 sm:px-8 pt-16 sm:pt-[4.25rem]"
+        className="relative z-10 shrink-0 max-w-6xl w-full mx-auto px-5 sm:px-8 pt-8 sm:pt-16"
         dir="rtl"
       >
         <div className="flex items-baseline gap-3">
