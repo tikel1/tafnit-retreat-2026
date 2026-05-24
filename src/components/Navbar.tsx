@@ -49,7 +49,7 @@ export default function Navbar() {
             aria-hidden
           >
             <img
-              src={`${assetUrl("app-icon-192.png")}?v=1`}
+              src={`${assetUrl("app-icon-192.png")}?v=2`}
               alt=""
               className="w-7 h-7 object-contain"
             />

@@ -2,21 +2,25 @@
 // Run once: `node scripts/generate-icons.mjs`.
 //
 // We:
-//   1. Crop the flat brain logo to a square (it ships as ~1024x1024 already).
-//   2. Resize to PWA + favicon sizes.
+//   1. Trim the flat white margins around the brain logo.
+//   2. Center-crop a tight square and resize to PWA + favicon sizes.
 //   3. Render a navy-padded "maskable" variant for Android.
 //
 // Run again any time the source artwork changes.
 
 import sharp from "sharp";
 import { mkdirSync } from "node:fs";
-import { dirname, resolve } from "node:path";
+import { resolve } from "node:path";
 
 const root = resolve(import.meta.dirname, "..");
 const src = resolve(root, "public/app-icon-source.png");
 const publicDir = resolve(root, "public");
 
 const NAVY = { r: 0x0f, g: 0x2a, b: 0x55, alpha: 1 };
+const WHITE = { r: 0xff, g: 0xff, b: 0xff, alpha: 1 };
+
+/** Trim white padding, then zoom in slightly so the brain fills the tile. */
+const CROP_ZOOM = 0.95;
 
 const sizes = [
   { out: "favicon-16.png", size: 16 },
@@ -29,23 +33,40 @@ const sizes = [
 
 mkdirSync(publicDir, { recursive: true });
 
+async function croppedSquareBuffer() {
+  const trimmed = await sharp(src).trim({ threshold: 15 }).toBuffer();
+  const { width, height } = await sharp(trimmed).metadata();
+  const side = Math.round(Math.min(width, height) * CROP_ZOOM);
+  const left = Math.round((width - side) / 2);
+  const top = Math.round((height - side) / 2);
+
+  return sharp(trimmed)
+    .extract({ left, top, width: side, height: side })
+    .png()
+    .toBuffer();
+}
+
+const cropped = await croppedSquareBuffer();
+
 for (const { out, size } of sizes) {
-  await sharp(src)
-    .resize(size, size, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+  await sharp(cropped)
+    .resize(size, size, { fit: "fill", background: WHITE })
+    .flatten({ background: WHITE })
     .png({ compressionLevel: 9 })
     .toFile(resolve(publicDir, out));
   console.log("wrote", out, size);
 }
 
-// Maskable version — navy background + ~20% padding so the brain still
-// reads as the dominant shape when Android crops to a circle / squircle.
+// Maskable version — navy background + safe padding for Android squircles.
 async function maskable(outName, size) {
-  const inner = Math.round(size * 0.78);
+  const inner = Math.round(size * 0.86);
   const padding = Math.round((size - inner) / 2);
-  const inset = await sharp(src)
-    .resize(inner, inner, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+  const inset = await sharp(cropped)
+    .resize(inner, inner, { fit: "fill", background: WHITE })
+    .flatten({ background: WHITE })
     .png()
     .toBuffer();
+
   await sharp({
     create: {
       width: size,
@@ -65,8 +86,9 @@ await maskable("app-icon-maskable-512.png", 512);
 
 // Generic favicon.ico — a single 32px PNG renamed so browsers that look
 // for /favicon.ico don't 404.
-await sharp(src)
-  .resize(32, 32, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
+await sharp(cropped)
+  .resize(32, 32, { fit: "fill", background: WHITE })
+  .flatten({ background: WHITE })
   .png({ compressionLevel: 9 })
   .toFile(resolve(publicDir, "favicon.ico"));
 
