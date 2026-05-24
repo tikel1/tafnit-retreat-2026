@@ -68,7 +68,9 @@ export const DICT = {
   plan_kicker: "יומיים של חוויות ורגעים יפים · החליקו ביניהם או לחצו לקריאה מלאה",
   plan_chapter_x_of_y: "יום {x} / {y}",
   read_more: "קראו עוד",
+  more_about_place: "עוד על המקום",
   hide_details: "הסתר פרטים",
+  about_this_place: "על המקום",
 
   /* ---------- Chapter detail ---------- */
   back_to_plan: "חזרה לתוכנית",
