@@ -16,8 +16,8 @@ concurrency:
 
 jobs:
   deploy-gemini-proxy:
-    if: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
 
@@ -30,16 +30,18 @@ jobs:
         run: npm install --prefix worker --no-audit --no-fund
 
       - name: Deploy Gemini proxy
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          workingDirectory: worker
-          command: deploy
-          secrets: |
-            GEMINI_API_KEY
         env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ] || [ -z "$CLOUDFLARE_ACCOUNT_ID" ] || [ -z "$GEMINI_API_KEY" ]; then
+            echo "Cloudflare/Gemini secrets not configured — skipping worker deploy."
+            exit 0
+          fi
+          echo "$GEMINI_API_KEY" | npx wrangler secret put GEMINI_API_KEY
+          npx wrangler deploy
+        working-directory: worker
 
   build:
     runs-on: ubuntu-latest

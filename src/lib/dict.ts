@@ -11,8 +11,8 @@
 
 export const DICT = {
   /* ---------- Brand / hero ---------- */
-  brand: "נופש חברה",
-  brand_short: "נופש חברה",
+  brand: "נופש חברה - תפנית",
+  brand_short: "נופש חברה - תפנית 26'",
   brand_year: "יוני 26'",
   brand_subtitle: "4-5 ביוני 2026",
   /* Magazine-style "by-line" shown under the masthead in the hero. */
@@ -259,7 +259,7 @@ export const DICT = {
   month_jun_short: "ביוני",
 
   /* ---------- Footer ---------- */
-  footer_made_with: "נבנה לעובדי תפנית · יוני 2026",
+  footer_made_with: "נבנה לעובדי תפנית",
   footer_tagline: "יומיים של ים, פינוקים וזמן ביחד — הפרטים כולם כאן.",
   footer_attribution:
     "תמונות בקרדיט ליוצריהן. מפה © OpenStreetMap ו-CARTO.",
