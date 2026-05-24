@@ -1,0 +1,33 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Environment variables (NEVER commit). The .local rule above already
+# catches .env.local, but be explicit here too — a stray `.env` or
+# `.env.production` should also stay out of the repo. The only env
+# file we DO commit is .env.example, kept as a contract for new
+# clones to know what variables exist.
+.env
+.env.*
+!.env.example
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

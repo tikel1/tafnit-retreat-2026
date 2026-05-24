@@ -1,0 +1,65 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install
+        # We use `npm install` rather than `npm ci` because the lock file is
+        # generated on Windows and CI runs on Linux — Linux needs the
+        # @emnapi/* optional native deps that Windows doesn't record.
+        run: npm install --no-audit --no-fund
+
+      - name: Build
+        run: npm run build
+        env:
+          # Baked into the JS bundle so retreat attendees don't have to paste
+          # their own Gemini key. Set this in:
+          #   GitHub repo → Settings → Secrets and variables →
+          #   Actions → New repository secret
+          # Name: VITE_GEMINI_API_KEY
+          # Value: AIza…
+          # If the secret is missing the build still succeeds; the
+          # site falls back to asking each visitor for their own key.
+          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

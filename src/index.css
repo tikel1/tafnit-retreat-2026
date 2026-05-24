@@ -1,0 +1,316 @@
+@import "tailwindcss";
+@import "leaflet/dist/leaflet.css";
+
+/* Leaflet uses internal z-index values up to ~1000. Without a dedicated
+   stacking context the map can visually cover fixed UI (mobile nav, FAB).
+   Isolate the map subtree so it cannot outrank app chrome. */
+.leaflet-container {
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+}
+
+@theme {
+  /* Primary brand — the deep navy from the Tafnit logotype */
+  --color-tafnit-navy-900: #0F2A55;
+  --color-tafnit-navy-800: #16356A;
+  --color-tafnit-navy-700: #1E3A6B;
+  --color-tafnit-navy-500: #2E5599;
+  --color-tafnit-navy-300: #7A95C2;
+  --color-tafnit-navy-100: #E3EAF5;
+
+  /* Secondary brand — the mint/sage green of the logo swoosh */
+  --color-tafnit-mint-700: #3A8867;
+  --color-tafnit-mint-600: #4FA37D;
+  --color-tafnit-mint-500: #6BB89A;
+  --color-tafnit-mint-300: #A6D4BE;
+  --color-tafnit-mint-100: #DFF0E7;
+
+  /* Neutrals — cream/sand pulled from the flyer's left pane */
+  --color-cream-50:  #FBF8EF;
+  --color-cream-100: #F4EFE0;
+  --color-cream-200: #E9E2CC;
+  --color-cream-300: #DACFA8;
+
+  --color-ink-900: #0B1B36;
+  --color-ink-800: #182846;
+  --color-ink-700: #3B4A66;
+
+  /* Soft sun accent — used very sparingly for the mystery-guest spotlight */
+  --color-sun-500: #F4B73A;
+
+  --font-sans:    "Heebo", "Assistant", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Assistant", "Heebo", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* The site is Hebrew-only and the html element is dir="rtl" from the start.
+   Heebo + Assistant cover both Hebrew and Latin so there is no language
+   switch to wire up. We keep the same font stack regardless of dir. */
+
+/* Always-Latin display face for the rare Latin numerals we want to keep
+   clean and geometric (countdown digits, "'26", small clock-style numbers).
+   Falls back gracefully when Assistant Latin numerals are fine. */
+.font-latin-display {
+  font-family: "Assistant", "Heebo", ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* Gemininio message list — iOS PWA / Chrome Android need an explicit
+   scroll layer with touch momentum and contained overscroll so the
+   swipe does not refresh the page or scroll the site behind the sheet. */
+.gem-chat-scroll {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  touch-action: pan-y;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
+/* Bump the base font size on mobile so all rem-based Tailwind sizes
+   (text-xs, text-sm, text-base, text-lg, etc.) get a +12.5% boost.
+   Desktop stays at the browser default of 16px. */
+@media (max-width: 640px) {
+  html {
+    font-size: 18px;
+  }
+}
+
+/* The site uses arbitrary fixed-px text sizes for small UI labels
+   (eyebrows, tags, microcopy). Those don't scale with the html
+   font-size bump above, so we give them an explicit ~+15% lift on
+   mobile to keep them legible without overhauling every component.
+   NOTE: lightningcss can't parse fractional pixels inside Tailwind's
+   arbitrary-value selectors (`text-[13.5px]` etc.), so we only override
+   integer-px utilities here. */
+@media (max-width: 640px) {
+  .text-\[8px\]    { font-size: 10px; line-height: 1.3;  }
+  .text-\[9px\]    { font-size: 11px; line-height: 1.35; }
+  .text-\[10px\]   { font-size: 12px; line-height: 1.35; }
+  .text-\[11px\]   { font-size: 13px; line-height: 1.4;  }
+  .text-\[12px\]   { font-size: 14px; line-height: 1.45; }
+  .text-\[13px\]   { font-size: 15px; line-height: 1.45; }
+  .text-\[14px\]   { font-size: 15px; line-height: 1.5;  }
+  .text-\[15px\]   { font-size: 16px; line-height: 1.55; }
+  .text-\[16px\]   { font-size: 17px; line-height: 1.5;  }
+  .text-\[17px\]   { font-size: 19px; line-height: 1.4;  }
+  .text-\[18px\]   { font-size: 20px; line-height: 1.4;  }
+}
+
+@media (max-width: 640px) {
+  [data-compact-ui] .text-\[10px\]   { font-size: 10px;   line-height: 1.3; }
+  [data-compact-ui] .text-\[11px\]   { font-size: 11px;   line-height: 1.4; }
+  [data-compact-ui] .text-\[12px\]   { font-size: 12px;   line-height: 1.4; }
+  [data-compact-ui] .text-\[13px\]   { font-size: 13px;   line-height: 1.4; }
+  [data-compact-ui] .text-xs   { font-size: 12px; line-height: 1.4;  }
+  [data-compact-ui] .text-sm   { font-size: 13px; line-height: 1.4;  }
+  [data-compact-ui] .text-base { font-size: 14px; line-height: 1.45; }
+}
+
+body {
+  font-family: var(--font-sans);
+  color: var(--color-ink-800);
+  background-color: var(--color-cream-50);
+  background-image:
+    radial-gradient(at 20% 0%, rgba(107, 184, 154, 0.06) 0px, transparent 50%),
+    radial-gradient(at 80% 100%, rgba(15, 42, 85, 0.04) 0px, transparent 50%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  font-weight: 700;
+}
+
+@layer components {
+  .section-title {
+    @apply font-display text-4xl sm:text-5xl text-tafnit-navy-900 leading-tight font-bold;
+  }
+
+  .section-eyebrow {
+    @apply uppercase tracking-[0.25em] text-xs font-semibold text-tafnit-mint-600 mb-3;
+  }
+
+  /* Mint brush-stroke eyebrow — echoes the "מה בתוכנית?" paint stroke
+     on the flyer. Used for editorial section eyebrows. */
+  .brand-brush {
+    @apply relative inline-block px-3 py-1 text-tafnit-navy-900 font-semibold;
+    background:
+      radial-gradient(120% 120% at 50% 50%, var(--color-tafnit-mint-300) 0%, var(--color-tafnit-mint-100) 60%, transparent 80%);
+    border-radius: 9999px;
+  }
+
+  /* Card surfaces — replace tuscany's `.card-paper`. */
+  .card-tafnit {
+    @apply bg-white border border-cream-200 rounded-2xl shadow-[0_2px_6px_rgba(15,42,85,0.05),0_12px_28px_-14px_rgba(15,42,85,0.18)];
+  }
+
+  .card-tafnit-hover {
+    @apply transition-all duration-300 hover:shadow-[0_2px_6px_rgba(15,42,85,0.08),0_18px_36px_-12px_rgba(15,42,85,0.22)] hover:-translate-y-0.5;
+  }
+
+  .card-tafnit-navy {
+    @apply bg-tafnit-navy-900 text-cream-50 rounded-2xl shadow-[0_8px_24px_-8px_rgba(15,42,85,0.45)];
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+
+  .pill-mint {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium bg-tafnit-mint-100 text-tafnit-mint-700;
+  }
+  .pill-navy {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium bg-tafnit-navy-100 text-tafnit-navy-700;
+  }
+  .pill-sun {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium bg-sun-500/15 text-tafnit-navy-900;
+  }
+
+  /* Mint icon-circle, mirrors the round icon chips on the flyer. */
+  .icon-chip {
+    @apply inline-flex items-center justify-center w-10 h-10 rounded-full bg-tafnit-mint-100 text-tafnit-mint-700 shrink-0;
+  }
+
+  .icon-chip-navy {
+    @apply inline-flex items-center justify-center w-10 h-10 rounded-full bg-tafnit-navy-100 text-tafnit-navy-700 shrink-0;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-full bg-tafnit-navy-700 px-5 py-2.5 text-sm font-semibold text-cream-50 transition-colors hover:bg-tafnit-navy-900 focus:outline-none focus:ring-2 focus:ring-tafnit-navy-500/40;
+  }
+
+  .btn-mint {
+    @apply inline-flex items-center gap-2 rounded-full bg-tafnit-mint-500 px-5 py-2.5 text-sm font-semibold text-tafnit-navy-900 transition-colors hover:bg-tafnit-mint-600 hover:text-white focus:outline-none focus:ring-2 focus:ring-tafnit-mint-500/40;
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 rounded-full border border-cream-200 bg-white/70 px-4 py-2 text-sm font-medium text-ink-800 transition-colors hover:bg-cream-100;
+  }
+
+  .icon-link {
+    @apply inline-flex items-center gap-1.5 text-xs font-medium text-ink-700 hover:text-tafnit-navy-700 transition-colors;
+  }
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Leaflet popup styling — cream surface, navy ink, matching the Tafnit
+   card system rather than Leaflet's default gray bubble. */
+.leaflet-popup-content-wrapper {
+  background: var(--color-cream-50) !important;
+  color: var(--color-ink-800) !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--color-cream-200) !important;
+  box-shadow: 0 16px 32px -12px rgba(15, 42, 85, 0.2) !important;
+}
+
+html[dir="rtl"] .leaflet-popup-content {
+  direction: rtl;
+  text-align: right;
+}
+
+html[dir="rtl"] .leaflet-control-attribution {
+  direction: ltr;
+}
+
+.leaflet-popup-tip {
+  background: var(--color-cream-50) !important;
+  border: 1px solid var(--color-cream-200) !important;
+}
+
+.leaflet-popup-content {
+  margin: 0 !important;
+  width: 240px !important;
+}
+
+.leaflet-container {
+  font-family: var(--font-sans) !important;
+  background: var(--color-cream-100) !important;
+}
+
+/* "You are here" marker pulse — the inner mint dot stays put while a
+   translucent mint ring expands and fades around it. Reduced-motion users
+   get a subtle static halo instead. */
+@keyframes user-location-pulse {
+  0%   { transform: scale(0.6); opacity: 0.85; }
+  80%  { opacity: 0; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tafnit-user-marker [style*="user-location-pulse"] {
+    animation: none !important;
+    transform: scale(1.6) !important;
+    opacity: 0.25 !important;
+  }
+}
+
+/* Gemininio "typing" indicator — three dots that wave in sequence
+   while we wait for the first token from Gemini. */
+@keyframes typing-dot {
+  0%, 60%, 100% { transform: translateY(0);    opacity: 0.35; }
+  30%           { transform: translateY(-3px); opacity: 0.95; }
+}
+.animate-typing-dot {
+  animation: typing-dot 1.05s infinite ease-in-out;
+}
+
+/* Blinking text caret rendered at the end of a streaming reply bubble. */
+@keyframes caret-blink {
+  0%, 50%   { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+.animate-caret-blink {
+  animation: caret-blink 0.9s steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-typing-dot,
+  .animate-caret-blink {
+    animation: none !important;
+    opacity: 0.7 !important;
+  }
+}
+
+/* Gemininio FAB — soft "breathing" pulse ring behind the launcher. */
+@keyframes gem-breathe {
+  0%, 100% { transform: scale(1);    opacity: 0.55; }
+  50%      { transform: scale(1.18); opacity: 0.0;  }
+}
+.animate-gem-breathe {
+  animation: gem-breathe 3s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-gem-breathe {
+    animation: none !important;
+    opacity: 0.4 !important;
+  }
+}
+
+/* Mystery-guest spotlight — a slow, very-subtle scan animation behind
+   the "?" silhouette on the MysteryGuestCard. Reduced-motion users get
+   a static gradient. */
+@keyframes mystery-spotlight {
+  0%   { transform: translateX(-30%) rotate(8deg); opacity: 0.0; }
+  50%  { opacity: 0.45; }
+  100% { transform: translateX(30%) rotate(8deg);  opacity: 0.0; }
+}
+.animate-mystery-spotlight {
+  animation: mystery-spotlight 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-mystery-spotlight { animation: none !important; opacity: 0.25 !important; }
+}

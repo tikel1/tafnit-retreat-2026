@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- ?v= bumps when icons change. Full-bleed 512px art + manifest
+         purpose any maskable so Android does not letterbox on white;
+         slight center zoom keeps saturated pixels at the circular mask. -->
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon-16.png?v=1" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon-32.png?v=1" />
+    <link rel="icon" type="image/png" sizes="192x192" href="./app-icon-192.png?v=1" />
+    <link rel="icon" type="image/png" sizes="512x512" href="./app-icon-512.png?v=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0F2A55" />
+
+    <!-- Installable web app: lets Android Chrome fire `beforeinstallprompt`
+         and gives the saved-to-home-screen launcher a name + icon. -->
+    <link rel="manifest" href="./manifest.webmanifest" />
+
+    <!-- iOS Safari: Apple ignores the manifest, so these meta tags are how
+         we get a clean home-screen icon, a custom short label, and a
+         standalone (chrome-less) launch experience. -->
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png?v=1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="תפנית '26" />
+
+    <title>נופש חברה תפנית · 4-5 ביוני 2026</title>
+    <meta
+      name="description"
+      content="נופש חברה תפנית · 4-5 ביוני 2026 · תוכנית, מלון דן תל אביב, ספא Via LOMAH, שייט מהמרינה בהרצליה, מפה וטיפים."
+    />
+
+    <!-- Open Graph (WhatsApp, Facebook, iMessage, LinkedIn, Slack) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="נופש חברה תפנית" />
+    <meta property="og:title" content="נופש חברה תפנית · 4-5 ביוני 2026" />
+    <meta
+      property="og:description"
+      content="יומיים של ים, פינוק וזמן ביחד — תל אביב והרצליה, 4-5 ביוני 2026."
+    />
+    <meta property="og:image" content="./images/og-cover.jpg" />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="נופש חברה תפנית — חצי ירוק של פינוק וחצי צבעוני של ים" />
+    <meta property="og:locale" content="he_IL" />
+
+    <!-- Twitter / X (also used as a fallback by some clients) -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="נופש חברה תפנית · 4-5 ביוני 2026" />
+    <meta
+      name="twitter:description"
+      content="יומיים של ים, פינוק וזמן ביחד — תל אביב והרצליה, 4-5 ביוני 2026."
+    />
+    <meta name="twitter:image" content="./images/og-cover.jpg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700;900&family=Assistant:wght@300;400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
