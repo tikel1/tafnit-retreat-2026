@@ -58,7 +58,7 @@ export async function generateGroundedReply(params: GroundedReplyParams): Promis
       systemInstruction: { parts: [{ text: params.systemInstruction }] },
       contents,
       generationConfig: {
-        temperature: 0.45,
+        temperature: 0.85,
         maxOutputTokens: 1200
       }
     };

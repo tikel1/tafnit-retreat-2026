@@ -92,6 +92,7 @@ export class LiveSession {
               parts: [{ text: this.opts.systemInstruction }]
             },
             generation_config: {
+              temperature: 0.85,
               response_modalities: ["AUDIO"],
               speech_config: {
                 voice_config: {

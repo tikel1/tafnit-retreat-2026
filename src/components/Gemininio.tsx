@@ -22,6 +22,7 @@ import { PcmPlayer } from "../lib/gemininio/audio";
 import { VoiceRecorder } from "../lib/gemininio/voiceRecorder";
 import { transcribeAudio } from "../lib/gemininio/transcribe";
 import {
+  buildLiveSessionSystemPrompt,
   buildTypedReplySystemPrompt,
   CHATTFNT_OPENER
 } from "../lib/gemininio/persona";
@@ -44,7 +45,7 @@ import {
   type Conversation
 } from "../lib/gemininio/storage";
 import { userFacingGemError } from "../lib/gemininio/logUserFacingError";
-import { completedTurnsForApi } from "../lib/gemininio/chatHistory";
+import { completedTurnsForApi, type ChatTurn } from "../lib/gemininio/chatHistory";
 import { subscribeOpenGemininio } from "../lib/gemininio/openEvent";
 
 /**
@@ -118,11 +119,20 @@ export default function Gemininio() {
   const sessionRef = useRef<LiveSession | null>(null);
   const playerRef = useRef<PcmPlayer | null>(null);
   const recorderRef = useRef<VoiceRecorder | null>(null);
+  const transcriptRef = useRef<string>("");
   const scrollRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const audioEnabledRef = useRef(audioEnabled);
   const webSearchEnabledRef = useRef(webSearchEnabled);
+
+  // Always-current snapshot of `messages` for Live callbacks that
+  // close over state at session-create time (otherwise they'd see
+  // a stale list when the first audio chunk arrives).
+  const messagesRef = useRef<Message[]>(messages);
+  useEffect(() => {
+    messagesRef.current = messages;
+  });
 
   /* ---------------- side effects ---------------- */
 
@@ -221,7 +231,7 @@ export default function Gemininio() {
     sessionRef.current = null;
 
     const id = createId();
-    const welcomeText = CHATTFNT_OPENER || "אהלן! אני ChatTFNT 🌊 שאלו על התוכנית, המלון או השייט.";
+    const welcomeText = CHATTFNT_OPENER || "אהלן! אני ChatTFNT 🌊 שאלו אותי כל דבר על הנופש, על תפנית, או על האזור.";
     const welcome: Message = {
       role: "model",
       text: welcomeText,
@@ -258,6 +268,111 @@ export default function Gemininio() {
 
   function close() {
     setStatus("closed");
+  }
+
+  /**
+   * Open or reuse a Gemini Live WebSocket session. We connect lazily on
+   * first send so opening the panel for a peek doesn't burn a socket.
+   *
+   * Pass `recentTurns` as the completed turns **before** the user
+   * message you're about to `sendText` (so the system prompt doesn't
+   * duplicate that line). Omit to derive from `messagesRef` (mic path).
+   */
+  async function ensureSession(recentTurns?: ChatTurn[]): Promise<LiveSession | null> {
+    if (sessionRef.current?.isOpen()) return sessionRef.current;
+
+    const apiKey = getApiKey();
+    if (!apiKey) {
+      setStatus("needs-key");
+      return null;
+    }
+
+    setStatus("connecting");
+    setError(null);
+
+    const turnsForPrompt =
+      recentTurns ?? completedTurnsForApi(messagesRef.current);
+
+    const session = new LiveSession(
+      {
+        apiKey,
+        systemInstruction: buildLiveSessionSystemPrompt(turnsForPrompt),
+        language: lang === "he" ? "he" : "en",
+        // Sessions are always AUDIO modality on the wire (Live's TEXT
+        // modality is broken on v1beta). When the speaker toggle is
+        // off we just drop the PCM client-side via `audioEnabledRef`;
+        // the text reply still arrives through `outputTranscription`.
+      },
+      {
+        onText: delta => {
+          setMessages(ms => {
+            const last = ms[ms.length - 1];
+            if (last && last.role === "model" && last.streaming) {
+              return [...ms.slice(0, -1), { ...last, text: last.text + delta }];
+            }
+            return [...ms, { role: "model", text: delta, ts: Date.now(), streaming: true }];
+          });
+        },
+        onAudio: pcm => {
+          // Drop bytes on the floor when speaker is muted. The text
+          // reply still flows through `onText`.
+          if (!audioEnabledRef.current) return;
+          if (!playerRef.current) playerRef.current = new PcmPlayer();
+          playerRef.current.enqueue(pcm);
+          setStatus("speaking");
+        },
+        onTranscript: delta => {
+          // Voice input only — accumulate the transcript of what the
+          // user said. We commit it as a user bubble on `turnComplete`.
+          transcriptRef.current += delta;
+        },
+        onTurnComplete: () => {
+          const transcript = transcriptRef.current.trim();
+          transcriptRef.current = "";
+          setMessages(ms => {
+            let next = ms;
+            if (transcript) {
+              const lastIsStreamingModel =
+                ms.length > 0 && ms[ms.length - 1].role === "model" && ms[ms.length - 1].streaming;
+              const userMsg: Message = {
+                role: "user",
+                text: transcript,
+                ts: Date.now() - 1
+              };
+              next = lastIsStreamingModel
+                ? [...ms.slice(0, -1), userMsg, ms[ms.length - 1]]
+                : [...ms, userMsg];
+            }
+            return next.map(m => (m.streaming ? { ...m, streaming: false } : m));
+          });
+          setStatus("ready");
+        },
+        onError: msg => {
+          const message = userFacingGemError("live:onError", new Error(msg), t);
+          setError(message);
+          setStatus("error");
+          setMessages(ms =>
+            ms.filter(m => !(m.role === "model" && m.streaming && !m.text))
+              .map(m => (m.streaming ? { ...m, streaming: false } : m))
+          );
+        },
+        onClose: () => {
+          if (status !== "closed") setStatus("ready");
+        }
+      }
+    );
+
+    try {
+      await session.connect();
+      sessionRef.current = session;
+      setStatus("ready");
+      return session;
+    } catch (e) {
+      const message = userFacingGemError("live:connect", e, t);
+      setError(message);
+      setStatus("error");
+      return null;
+    }
   }
 
   async function submitUserMessage(explicitText?: string) {
@@ -307,13 +422,34 @@ export default function Gemininio() {
       }).catch(() => { /* ignore */ });
     }
 
+    // Globe OFF (default): route through Gemini Live. The wire is
+    // always AUDIO modality so the speaker toggle just gates whether
+    // PCM is played — text still streams back via outputTranscription.
+    // Globe ON: REST + Google Search (text only — Live can't use
+    // the search tool).
+    if (!searchOn) {
+      if (!playerRef.current) playerRef.current = new PcmPlayer();
+      try {
+        await playerRef.current.ensureAudioUnlocked();
+      } catch {
+        /* still try Live */
+      }
+      const s = await ensureSession(priorForApi);
+      if (!s) {
+        setMessages(ms => ms.filter(m => !(m.role === "model" && m.streaming && !m.text)));
+        return;
+      }
+      s.sendText(trimmed);
+      return;
+    }
+
     const sys = buildTypedReplySystemPrompt();
     try {
       const reply = await generateGroundedReply({
         apiKey,
         systemInstruction: sys,
         userMessage: trimmed,
-        useGoogleSearch: searchOn,
+        useGoogleSearch: true,
         history: priorForApi
       });
       setMessages(ms => {
