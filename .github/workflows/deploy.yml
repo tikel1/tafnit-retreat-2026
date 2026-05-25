@@ -63,9 +63,13 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          # Public worker URL (no secret). Example:
+          # Preferred: Cloudflare proxy (key stays on the worker).
           # https://tafnit-gemini-proxy.<account>.workers.dev/gemini
           VITE_GEMINI_PROXY_URL: ${{ vars.VITE_GEMINI_PROXY_URL }}
+          # Fallback when proxy is not configured yet — bakes the key into
+          # the bundle (same as tuscany-2026). Restrict by HTTP referrer in
+          # Google AI Studio: https://tikel1.github.io/*
+          VITE_GEMINI_API_KEY: ${{ secrets.VITE_GEMINI_API_KEY }}
 
       - name: Verify no API key in bundle
         if: vars.VITE_GEMINI_PROXY_URL != ''
