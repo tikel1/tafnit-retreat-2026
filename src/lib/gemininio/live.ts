@@ -20,10 +20,11 @@
 import { bytesToBase64 } from "./audio";
 import { buildLiveWebSocketUrl } from "./geminiEndpoint";
 
-/* Currently-valid bidiGenerateContent models on v1beta.
- * `gemini-3.1-flash-live-preview` is the documented "all use cases" recommendation. */
-const PRIMARY_MODEL  = "models/gemini-3.1-flash-live-preview";
-const FALLBACK_MODEL = "models/gemini-2.5-flash-native-audio-latest";
+const MODELS_TO_TRY = [
+  "models/gemini-3.1-flash-live-preview",
+  "models/gemini-2.5-flash-native-audio-latest",
+  "models/gemini-2.0-flash-exp"
+] as const;
 
 /** Voices ship with the Live model. "Charon" is warm and slightly husky. */
 const VOICE_NAME = "Charon";
@@ -63,11 +64,18 @@ export class LiveSession {
 
   connect(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.openOnce(PRIMARY_MODEL)
-        .then(resolve)
-        .catch(() =>
-          this.openOnce(FALLBACK_MODEL).then(resolve).catch(reject)
-        );
+      const tryModels = [...MODELS_TO_TRY];
+
+      const tryNext = () => {
+        const model = tryModels.shift();
+        if (!model) {
+          reject(new Error("All Live models failed to connect or ran out of quota."));
+          return;
+        }
+        this.openOnce(model).then(resolve).catch(tryNext);
+      };
+
+      tryNext();
     });
   }
 

@@ -8,7 +8,13 @@
 import type { ChatTurn } from "./chatHistory";
 import { buildGenerateContentUrl } from "./geminiEndpoint";
 
-const MODELS_TO_TRY = ["gemini-2.5-flash-lite", "gemini-2.5-flash", "gemini-2.0-flash"] as const;
+const MODELS_TO_TRY = [
+  "gemini-2.5-flash",
+  "gemini-2.5-flash-lite",
+  "gemini-2.0-flash",
+  "gemini-1.5-flash",
+  "gemini-1.5-pro"
+] as const;
 
 const MAX_REST_HISTORY_TURNS = 40;
 
