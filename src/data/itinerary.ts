@@ -5,14 +5,14 @@ import { assetUrl } from "../lib/assets";
  * The two-chapter itinerary for the Tafnit 2026 company retreat.
  *
  *   Day 1 — Thursday, 4 June 2026
- *     08:30 מפגש בעזריאלי
+ *     8:15 מפגש בעזריאלי
  *     09:00 עגלת קפה — מיקא
  *     10:45 שייט מהמרינה בהרצליה
  *     ~15:00 הגעה למלון דן תל אביב
  *     אחה"צ/ערב: בריכה · ספא Via LOMAH · ארוחת ערב · אומן אורח (הפתעה)
  *
  *   Day 2 — Friday, 5 June 2026
- *     ארוחת בוקר · טיפולים · בריכה
+ *     ארוחת בוקר · בריכה
  *     12:30 שיחת פרידה · שבת שלום
  *
  * The 4 June evening "אומן אורח" activity is flagged `isMystery: true`
@@ -34,7 +34,7 @@ export const itinerary: Day[] = [
     leadImage: assetUrl("images/sailing-hero.jpg"),
     activities: [
       {
-        time: "08:30",
+        time: "8:15",
         title: "מפגש בעזריאלי",
         description:
           "מתאספים במשרד שלנו בעזריאלי ויוצאים מכאן יחד ליום הנופש.",
@@ -79,7 +79,7 @@ export const itinerary: Day[] = [
       {
         title: "טיפולים בספא Via LOMAH",
         description:
-          "ארבעה חדרי טיפולים יוקרתיים, מגוון עיסויים מ-60 דקות ומעלה בשילוב שמנים ארץ-ישראליים מובחרים, וחליטת צמחים חמה לסיום.",
+          "חדרי טיפולים יוקרתיים, עיסויים של 45 דקות בשילוב שמנים ארץ-ישראליים מובחרים, וחליטת צמחים חמה לסיום.",
         icon: "spa",
         image: assetUrl("images/via-lomah-spa.jpg"),
       },
@@ -100,7 +100,6 @@ export const itinerary: Day[] = [
     ],
     dayTips: [
       "לוקחים בגד ים, חולצה דקה לשייט וקרם הגנה מעל 30 SPF",
-      "כדאי להזמין טיפול ספא מראש (054-860-88-88) כדי לתפוס חלון נוח בין הבריכה לארוחה.",
       "לארוחת הערב והופעה — תבואו חגיגיים ויפים.",
     ],
   },
@@ -109,7 +108,7 @@ export const itinerary: Day[] = [
     date: "2026-06-05",
     weekday: "שישי",
     title: "בוקר רגוע · שבת שלום",
-    subtitle: "ארוחת בוקר · טיפולים · בריכה · שיחת פרידה",
+    subtitle: "ארוחת בוקר · בריכה · שיחת פרידה",
     leadImage: assetUrl("images/dan-tel-aviv.jpg"),
     activities: [
       {
@@ -120,16 +119,9 @@ export const itinerary: Day[] = [
         image: assetUrl("images/breakfast.jpg"),
       },
       {
-        title: "טיפולים בספא",
-        description:
-          "למי שרוצה להספיק עוד רגע של רוגע — סבב טיפולים נוסף ב-Via LOMAH לפני שמתפזרים.",
-        icon: "spa",
-        image: assetUrl("images/via-lomah-spa.jpg"),
-      },
-      {
         title: "בריכה ושעה חופשית",
         description:
-          "זמן חופשי אחרון ליהנות מהבריכה, מהשמש או מקפה נינוח בלובי לפני האריזות והצ'ק-אאוט.",
+          "זמן חופשי אחרון ליהנות מהבריכה ומהשמש לפני האריזות והצ'ק-אאוט.",
         icon: "pool",
         image: assetUrl("images/pool.jpg"),
       },

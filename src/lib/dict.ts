@@ -26,7 +26,7 @@ export const DICT = {
   hero_after_lead: "ככה זה היה",
   /* Smaller phase hints (italic, below the countdown). */
   hero_close_almost: "כמעט שם – לא לשכוח לארוז את בגד הים!",
-  hero_one_week: "שבוע אחד לסוף שבוע בלתי נשכח · זה הזמן להזמין טיפול בספא",
+  hero_one_week: "שבוע אחד לסוף שבוע בלתי נשכח",
   hero_one_month: "עוד מעט ממש! זמן מעולה לאשר השתתפות",
   hero_far: "מתחילים את הספירה לאחור",
   hero_after_title: "תודה שבאתם",
@@ -138,8 +138,6 @@ export const DICT = {
   spa_book_call: "התקשרו",
   spa_book_whatsapp: "וואטסאפ",
   spa_age_note: "הכניסה מגיל 18 ומעלה",
-  spa_booking_note: "מומלץ להזמין מראש",
-
   /* ---------- Tips section ---------- */
   tips_eyebrow: "טיפים",
   tips_title: "כמה דברים שכדאי לדעת מראש",

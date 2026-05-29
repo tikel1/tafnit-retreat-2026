@@ -4,18 +4,9 @@ import type { Tip } from "./types";
  * The handful of practical tips that earn a spot on the home page.
  * Severity drives the chip color (`info` = mint, `warning` = sun).
  *
- * Tips with a `link` get a small CTA button beside them — used here
- * for the spa booking phone and the hotel switchboard.
+ * Tips with a `link` get a small CTA button beside them.
  */
 export const tips: Tip[] = [
-  {
-    id: "spa-booking",
-    title: "להזמין טיפול ספא מראש",
-    body: "ספא Via LOMAH הוא ספא בוטיק אינטימי הכולל 4 חדרי טיפולים בלבד. מומלץ בחום לתאם טיפול טלפונית או בוואטסאפ מראש, כדי להבטיח לעצמכם חלון זמן מושלם בין הבריכה לארוחת הערב.",
-    severity: "warning",
-    link: "tel:0548608888",
-    linkLabel: "התקשרו עכשיו",
-  },
   {
     id: "boat-attire",
     title: "מה ללבוש לשייט",

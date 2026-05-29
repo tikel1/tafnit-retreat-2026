@@ -3,13 +3,13 @@ import type { Day } from "../data/types";
 
 /**
  * Trip clock. The retreat spans local Thursday 4 June 2026 morning
- * (~08:30) through Friday 5 June 2026 ~13:00.
+ * (~8:15) through Friday 5 June 2026 ~13:00.
  *
  * `featured` flips from today to tomorrow at 20:00 local time on Day 1
  * so by the time everyone's at dinner the hero already previews
  * Friday's plan.
  */
-export const TRIP_START = new Date("2026-06-04T08:30:00+03:00");
+export const TRIP_START = new Date("2026-06-04T08:15:00+03:00");
 export const TRIP_END = new Date("2026-06-05T13:00:00+03:00");
 
 export interface CountdownParts {

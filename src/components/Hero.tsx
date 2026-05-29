@@ -16,7 +16,7 @@ interface HeroPhoto {
   /** Tiny credit / theme tag underneath the place. */
   credit: string;
   /** Day number this image belongs to (chip next to the place name).
-   *  Day 1 = the boat, Day 2 = the spa. */
+   *  Day 1 = the boat, Day 2 = the pool. */
   dayNumber?: number;
 }
 

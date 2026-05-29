@@ -18,7 +18,7 @@ export const venues: Venue[] = [
     address: "דרך מנחם בגין 132, תל אביב",
     coords: [32.0744, 34.7919],
     description:
-      "המשרד שלנו — בבוקר חמישי, 08:30, מתאספים ויוצאים יחד לדרך.",
+      "המשרד שלנו — בבוקר חמישי, 8:15, מתאספים ויוצאים יחד לדרך.",
     image: assetUrl("images/azrieli.jpg"),
     website: "https://www.azrieli.com/centers/tel-aviv-center/",
   },

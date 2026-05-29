@@ -220,7 +220,7 @@ export default function StaysSection() {
                           {t("spa_rooms_label")}
                         </div>
                         <div className="text-sm text-tafnit-navy-900 font-medium">
-                          {viaLomahSpa.rooms} חדרי טיפולים
+                          חדרי טיפולים יוקרתיים
                         </div>
                       </div>
                     </div>
@@ -266,9 +266,6 @@ export default function StaysSection() {
                         </li>
                       ))}
                     </ul>
-                    <p className="mt-3 text-[13px] text-tafnit-navy-700/85 italic">
-                      {viaLomahSpa.bookingNote}
-                    </p>
                   </div>
                 </div>
               </motion.div>

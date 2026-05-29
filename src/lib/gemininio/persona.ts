@@ -152,10 +152,10 @@ function digestSpa(): string {
     `  - Location: Inside the Dan Tel Aviv Hotel`,
     `  - Hours: ${viaLomahSpa.hours}`,
     `  - Phone/WhatsApp: ${viaLomahSpa.phone}`,
-    `  - Rooms: ${viaLomahSpa.rooms} rooms available`,
+    `  - Treatment rooms: luxury treatment rooms`,
+    `  - Treatment duration: 45 minutes per session`,
     `  - Highlights:`,
     viaLomahSpa.highlights.map(h => `    • ${h}`).join("\n"),
-    `  - Booking Note: ${viaLomahSpa.bookingNote}`,
     ...(viaLomahSpa.ageLimitNote
       ? [`  - Age Limit: ${viaLomahSpa.ageLimitNote}`]
       : []),

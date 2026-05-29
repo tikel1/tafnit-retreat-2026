@@ -37,7 +37,7 @@ export type ActivityIcon =
   | "meeting";
 
 export interface DayActivity {
-  /** "08:30", "09:00", "10:45". Optional for "evening" blocks without a hard time. */
+  /** "8:15", "9:00", "10:45". Optional for "evening" blocks without a hard time. */
   time?: string;
   title: string;
   description?: string;
@@ -66,7 +66,7 @@ export interface Day {
   /** Fallback hero image if no activity in the day has one. */
   leadImage?: string;
   activities: DayActivity[];
-  /** Per-day advice — "מה ללבוש לשייט", "להזמין טיפול מראש". */
+  /** Per-day advice — e.g. "מה ללבוש לשייט". */
   dayTips?: string[];
 }
 
@@ -82,7 +82,6 @@ export interface Spa {
   whatsapp?: string;
   rooms: number;
   highlights: string[];
-  bookingNote: string;
   ageLimitNote?: string;
   image?: string;
 }
