@@ -12,7 +12,7 @@ import { assetUrl } from "../lib/assets";
  *     אחה"צ/ערב: בריכה · ספא Via LOMAH · ארוחת ערב · אומן אורח (הפתעה)
  *
  *   Day 2 — Friday, 5 June 2026
- *     ארוחת בוקר · בריכה
+ *     ארוחת בוקר · טיפולים · בריכה
  *     12:30 שיחת פרידה · שבת שלום
  *
  * The 4 June evening "אומן אורח" activity is flagged `isMystery: true`
@@ -108,7 +108,7 @@ export const itinerary: Day[] = [
     date: "2026-06-05",
     weekday: "שישי",
     title: "בוקר רגוע · שבת שלום",
-    subtitle: "ארוחת בוקר · בריכה · שיחת פרידה",
+    subtitle: "ארוחת בוקר · טיפולים · בריכה · שיחת פרידה",
     leadImage: assetUrl("images/dan-tel-aviv.jpg"),
     activities: [
       {
@@ -117,6 +117,13 @@ export const itinerary: Day[] = [
           "ארוחת בוקר ישראלית עשירה ומגוונת מול נוף מרהיב לים. פותחים את שישי ברוגע מוחלט.",
         icon: "breakfast",
         image: assetUrl("images/breakfast.jpg"),
+      },
+      {
+        title: "טיפולים בספא",
+        description:
+          "למי שרוצה להספיק עוד רגע של רוגע — טיפולים ב-Via LOMAH לפני שמתפזרים.",
+        icon: "spa",
+        image: assetUrl("images/via-lomah-spa.jpg"),
       },
       {
         title: "בריכה ושעה חופשית",
