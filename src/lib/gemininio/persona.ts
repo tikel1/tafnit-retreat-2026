@@ -151,7 +151,6 @@ function digestSpa(): string {
     `SPA DETAILS (${viaLomahSpa.name}):`,
     `  - Location: Inside the Dan Tel Aviv Hotel`,
     `  - Hours: ${viaLomahSpa.hours}`,
-    `  - Phone/WhatsApp: ${viaLomahSpa.phone}`,
     `  - Treatment rooms: luxury treatment rooms`,
     `  - Treatment duration: 45 minutes per session`,
     `  - Highlights:`,

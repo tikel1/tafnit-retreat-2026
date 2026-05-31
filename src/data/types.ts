@@ -78,8 +78,6 @@ export interface Spa {
   name: string;
   hotelId: string;
   hours: string;
-  phone: string;
-  whatsapp?: string;
   rooms: number;
   highlights: string[];
   ageLimitNote?: string;

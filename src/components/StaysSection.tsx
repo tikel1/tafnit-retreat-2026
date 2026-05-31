@@ -8,7 +8,6 @@ import {
   Sparkles,
   Hotel,
   ExternalLink,
-  MessageCircle,
   Info
 } from "lucide-react";
 import Section from "./Section";
@@ -203,17 +202,6 @@ export default function StaysSection() {
                       </div>
                     </div>
                     <div className="flex items-start gap-3">
-                      <Phone size={16} className="mt-0.5 text-tafnit-mint-700 shrink-0" />
-                      <div>
-                        <div className="text-[10px] uppercase tracking-[0.22em] text-tafnit-mint-700 font-semibold">
-                          {t("spa_phone_label")}
-                        </div>
-                        <div className="text-sm text-tafnit-navy-900 font-medium" dir="ltr">
-                          {viaLomahSpa.phone}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-start gap-3">
                       <Sparkles size={16} className="mt-0.5 text-tafnit-mint-700 shrink-0" />
                       <div>
                         <div className="text-[10px] uppercase tracking-[0.22em] text-tafnit-mint-700 font-semibold">
@@ -223,26 +211,6 @@ export default function StaysSection() {
                           חדרי טיפולים יוקרתיים
                         </div>
                       </div>
-                    </div>
-                    <div className="pt-1 flex flex-wrap gap-2">
-                      <a
-                        href={`tel:${viaLomahSpa.phone.replace(/[\s-]/g, "")}`}
-                        className="btn-mint"
-                      >
-                        <Phone size={14} />
-                        {t("spa_book_call")}
-                      </a>
-                      {viaLomahSpa.whatsapp && (
-                        <a
-                          href={viaLomahSpa.whatsapp}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn-ghost"
-                        >
-                          <MessageCircle size={14} />
-                          {t("spa_book_whatsapp")}
-                        </a>
-                      )}
                     </div>
                     {viaLomahSpa.ageLimitNote && (
                       <p className="text-[11px] text-ink-700/65 mt-1">

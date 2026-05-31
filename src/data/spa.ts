@@ -16,8 +16,6 @@ export const viaLomahSpa: Spa = {
   name: "Via LOMAH Spa",
   hotelId: "dan-tel-aviv",
   hours: "9:00 – 21:00 (כפוף לשינוי)",
-  phone: "054-860-88-88",
-  whatsapp: "https://wa.me/972548608888",
   rooms: 4,
   highlights: [
     "נוף פנורמי לחוף תל אביב",

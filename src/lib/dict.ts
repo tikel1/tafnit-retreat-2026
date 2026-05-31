@@ -133,10 +133,7 @@ export const DICT = {
   spa_section_title: "Via LOMAH Spa",
   spa_section_subtitle: "הספא של מלון דן תל אביב",
   spa_hours_label: "שעות פתיחה",
-  spa_phone_label: "טלפון להזמנות",
   spa_rooms_label: "חדרי טיפולים",
-  spa_book_call: "התקשרו",
-  spa_book_whatsapp: "וואטסאפ",
   spa_age_note: "הכניסה מגיל 18 ומעלה",
   /* ---------- Tips section ---------- */
   tips_eyebrow: "טיפים",
