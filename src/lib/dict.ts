@@ -23,7 +23,7 @@ export const DICT = {
   hero_before_lead: "סוף שבוע של פינוקים וחוויות",
   hero_today_lead: "היום בנופש",
   hero_tomorrow_lead: "מחר בנופש",
-  hero_after_lead: "ככה זה היה",
+  hero_after_lead: "עד הפעם הבאה",
   /* Smaller phase hints (italic, below the countdown). */
   hero_close_almost: "כמעט שם – לא לשכוח לארוז את בגד הים!",
   hero_one_week: "שבוע אחד לסוף שבוע בלתי נשכח",
